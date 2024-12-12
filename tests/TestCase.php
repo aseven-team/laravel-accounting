@@ -2,9 +2,9 @@
 
 namespace AsevenTeam\LaravelAccounting\Tests;
 
+use AsevenTeam\LaravelAccounting\LaravelAccountingServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use AsevenTeam\LaravelAccounting\LaravelAccountingServiceProvider;
 
 class TestCase extends Orchestra
 {
