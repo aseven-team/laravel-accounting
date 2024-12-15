@@ -93,7 +93,7 @@ class TransactionCreator
     protected function getTransaction(): Transaction
     {
         if (! $this->transaction) {
-            $this->transaction = new Transaction();
+            $this->transaction = new Transaction;
             $this->lines = collect();
         }
 

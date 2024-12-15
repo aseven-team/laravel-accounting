@@ -2,7 +2,6 @@
 
 namespace AsevenTeam\LaravelAccounting;
 
-use AsevenTeam\LaravelAccounting\Commands\LaravelAccountingCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
