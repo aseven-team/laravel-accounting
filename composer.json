@@ -1,12 +1,12 @@
 {
-    "name": "aseven-team/laravelaccounting",
+    "name": "aseven-team/laravel-accounting",
     "description": "Accounting package for Laravel",
     "keywords": [
         "AsevenTeam",
         "laravel",
-        "laravelaccounting"
+        "laravel-accounting"
     ],
-    "homepage": "https://github.com/aseven-team/laravelaccounting",
+    "homepage": "https://github.com/aseven-team/laravel-accounting",
     "license": "MIT",
     "authors": [
         {
@@ -16,15 +16,15 @@
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^10.0||^11.0"
+        "illuminate/contracts": "^11.0"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
-        "nunomaduro/collision": "^8.1.1||^7.10.0",
+        "nunomaduro/collision": "^8.1",
         "larastan/larastan": "^2.9",
-        "orchestra/testbench": "^9.0.0||^8.22.0",
+        "orchestra/testbench": "^9.0",
         "pestphp/pest": "^3.0",
         "pestphp/pest-plugin-arch": "^3.0",
         "pestphp/pest-plugin-laravel": "^3.0",
@@ -36,7 +36,10 @@
         "psr-4": {
             "AsevenTeam\\LaravelAccounting\\": "src/",
             "AsevenTeam\\LaravelAccounting\\Database\\Factories\\": "database/factories/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -63,10 +66,7 @@
         "laravel": {
             "providers": [
                 "AsevenTeam\\LaravelAccounting\\LaravelAccountingServiceProvider"
-            ],
-            "aliases": {
-                "LaravelAccounting": "AsevenTeam\\LaravelAccounting\\Facades\\LaravelAccounting"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",

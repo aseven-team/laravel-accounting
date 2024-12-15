@@ -1,39 +1,30 @@
-# Accounting package for Laravel
+# Laravel Accounting
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/aseven-team/laravelaccounting.svg?style=flat-square)](https://packagist.org/packages/aseven-team/laravelaccounting)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/aseven-team/laravelaccounting/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/aseven-team/laravelaccounting/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/aseven-team/laravelaccounting/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/aseven-team/laravelaccounting/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/aseven-team/laravelaccounting.svg?style=flat-square)](https://packagist.org/packages/aseven-team/laravelaccounting)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/aseven-team/laravel-accounting.svg?style=flat-square)](https://packagist.org/packages/aseven-team/laravel-accounting)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/aseven-team/laravel-accounting/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/aseven-team/laravel-accounting/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/aseven-team/laravel-accounting/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/aseven-team/laravel-accounting/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/aseven-team/laravel-accounting.svg?style=flat-square)](https://packagist.org/packages/aseven-team/laravel-accounting)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/LaravelAccounting.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/LaravelAccounting)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require aseven-team/laravelaccounting
+composer require aseven-team/laravel-accounting
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravelaccounting-migrations"
+php artisan vendor:publish --tag="laravel-accounting-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravelaccounting-config"
+php artisan vendor:publish --tag="laravel-accounting-config"
 ```
 
 This is the contents of the published config file:
@@ -43,17 +34,33 @@ return [
 ];
 ```
 
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravelaccounting-views"
-```
-
 ## Usage
 
+### Create an account
 ```php
-$laravelAccounting = new AsevenTeam\LaravelAccounting();
-echo $laravelAccounting->echoPhrase('Hello, AsevenTeam!');
+use Aseven\Accounting\Models\Account;
+use Aseven\Accounting\Enums\AccountType;
+use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
+
+Account::create([
+    'code' => '1-1001',
+    'name' => 'Cash',
+    'type' => AccountType::Asset,
+    'normal_balance' => NormalBalance::Debit,
+    'parent_id' => null, // optional
+    'is_active' => true, // optional
+    'description' => 'Cash in hand', // optional
+]);
+```
+
+### Create a transaction
+```php
+transaction()
+    ->setDate(now())
+    ->withDescription('Buy raw material')
+    ->addLine(account: '1-1001', debit: 0, credit: 1000)
+    ->addLine(account: '5-1001', debit: 1000, credit: 0)
+    ->save()
 ```
 
 ## Testing
