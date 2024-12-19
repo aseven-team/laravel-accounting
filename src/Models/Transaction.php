@@ -18,7 +18,6 @@ use Illuminate\Support\Carbon;
  * @property string $number
  * @property Carbon $date
  * @property ?string $description
- *
  * @property-read Model $reference
  * @property-read Collection<int, TransactionLine> $lines
  */
