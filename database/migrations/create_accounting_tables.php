@@ -23,6 +23,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('reference');
+            $table->unsignedBigInteger('sequence');
+            $table->string('number', 20)->unique();
             $table->date('date');
             $table->text('description')->nullable();
             $table->timestamps();

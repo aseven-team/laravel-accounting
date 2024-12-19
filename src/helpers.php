@@ -1,10 +1,11 @@
 <?php
 
-use AsevenTeam\LaravelAccounting\TransactionCreator;
+use AsevenTeam\LaravelAccounting\Models\Transaction;
+use AsevenTeam\LaravelAccounting\PendingTransaction;
 
 if (! function_exists('transaction')) {
-    function transaction(): TransactionCreator
+    function transaction(?Transaction $transaction = null): PendingTransaction
     {
-        return app(TransactionCreator::class);
+        return new PendingTransaction($transaction);
     }
 }

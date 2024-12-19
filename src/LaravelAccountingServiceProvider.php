@@ -14,9 +14,4 @@ class LaravelAccountingServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasMigrations('create_accounting_tables');
     }
-
-    public function registeringPackage(): void
-    {
-        $this->app->bind(TransactionCreator::class);
-    }
 }

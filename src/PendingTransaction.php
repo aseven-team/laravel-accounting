@@ -11,11 +11,24 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class TransactionCreator
+class PendingTransaction
 {
     protected ?Transaction $transaction = null;
 
     protected Collection $lines;
+
+    public function __construct(?Transaction $transaction = null)
+    {
+        $this->transaction = $transaction;
+        $this->lines = collect();
+    }
+
+    public function setNumber(string $number): static
+    {
+        $this->getTransaction()->number = $number;
+
+        return $this;
+    }
 
     public function setDate(DateTimeInterface $date): static
     {
@@ -40,10 +53,8 @@ class TransactionCreator
 
     public function addLine(Account|string $account, float $debit, float $credit, ?string $description = null): self
     {
-        $this->getTransaction(); // Ensure transaction is initialized
-
         if (is_string($account)) {
-            $account = Account::findByCode($account);
+            $account = Account::findByCode($account); // todo: prevent multiple queries
         }
 
         $this->lines->push([
@@ -67,6 +78,10 @@ class TransactionCreator
         }
 
         $transaction->save();
+
+        if (! $transaction->wasRecentlyCreated) {
+            $transaction->lines()->delete();
+        }
 
         $transaction->lines()->createMany($this->lines->toArray());
 
