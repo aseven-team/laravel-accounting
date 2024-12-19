@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 trait AutoSetNumber
 {
-    protected static function bootHasNumber(): void
+    protected static function bootAutoSetNumber(): void
     {
         static::creating(function (Model $model) {
             if ($model instanceof HasNumber) {
