@@ -2,22 +2,31 @@
 
 namespace AsevenTeam\LaravelAccounting\Concerns;
 
+use AsevenTeam\LaravelAccounting\Contracts\HasNumber;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @mixin Model
- */
-trait HasNumber
+trait AutoSetNumber
 {
     protected static function bootHasNumber(): void
     {
         static::creating(function (Model $model) {
-            $model->{$this->getSequenceColumnName()} = $this->getNewSequence();
-
-            if (! isset($model->number)) {
-                $model->{$this->getNumberColumnName()} = $this->generateNumber($model->{$this->getSequenceColumnName()});
+            if ($model instanceof HasNumber) {
+                $model->setSequence();
+                $model->setNumber();
             }
         });
+    }
+
+    public function setSequence(): void
+    {
+        $this->{$this->getSequenceColumnName()} = $this->getNewSequence();
+    }
+
+    public function setNumber(): void
+    {
+        if (! isset($this->{$this->getNumberColumnName()})) {
+            $this->{$this->getNumberColumnName()} = $this->generateNumber($this->{$this->getSequenceColumnName()});
+        }
     }
 
     protected function getNewSequence(): int

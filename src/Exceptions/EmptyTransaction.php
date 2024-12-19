@@ -4,10 +4,10 @@ namespace AsevenTeam\LaravelAccounting\Exceptions;
 
 use RuntimeException;
 
-class EmptyTransaction extends RuntimeException
+final class EmptyTransaction extends RuntimeException
 {
-    public static function create(): static
+    public static function create(): self
     {
-        return new static('Transaction is empty. Please add at least one line to the transaction.');
+        return new self('Transaction is empty. Please add at least one line to the transaction.');
     }
 }

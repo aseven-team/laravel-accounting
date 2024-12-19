@@ -6,9 +6,9 @@ use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalanceTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
-use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class PendingTransaction
@@ -73,7 +73,7 @@ class PendingTransaction
 
         $this->ensureTransactionIsBalanced();
 
-        if (! $transaction->date) {
+        if (! isset($transaction->date)) {
             $transaction->date = Carbon::now();
         }
 

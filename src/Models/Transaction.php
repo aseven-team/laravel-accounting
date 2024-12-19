@@ -2,14 +2,29 @@
 
 namespace AsevenTeam\LaravelAccounting\Models;
 
-use AsevenTeam\LaravelAccounting\Concerns\HasNumber;
+use AsevenTeam\LaravelAccounting\Concerns\AutoSetNumber;
+use AsevenTeam\LaravelAccounting\Contracts\HasNumber;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Carbon;
 
-class Transaction extends Model
+/**
+ * @property int $id
+ * @property string $reference_type
+ * @property int $reference_id
+ * @property int $sequence
+ * @property string $number
+ * @property Carbon $date
+ * @property ?string $description
+ *
+ * @property-read Model $reference
+ * @property-read Collection<int, TransactionLine> $lines
+ */
+class Transaction extends Model implements HasNumber
 {
-    use HasNumber;
+    use AutoSetNumber;
 
     protected $table = 'transactions';
 
