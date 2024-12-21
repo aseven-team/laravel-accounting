@@ -26,8 +26,8 @@ use Illuminate\Support\Carbon;
  */
 class Transaction extends Model implements HasNumber
 {
-    use HasFactory;
     use AutoSetNumber;
+    use HasFactory;
 
     protected $table = 'transactions';
 
