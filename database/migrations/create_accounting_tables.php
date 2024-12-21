@@ -25,7 +25,7 @@ return new class extends Migration
             $table->nullableMorphs('reference');
             $table->unsignedBigInteger('sequence');
             $table->string('number', 20)->unique();
-            $table->date('date');
+            $table->date('date')->index();
             $table->text('description')->nullable();
             $table->timestamps();
         });
