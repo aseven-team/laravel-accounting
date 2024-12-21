@@ -109,7 +109,6 @@ class PendingTransaction
     {
         if (! $this->transaction) {
             $this->transaction = new Transaction;
-            $this->lines = collect();
         }
 
         return $this->transaction;
