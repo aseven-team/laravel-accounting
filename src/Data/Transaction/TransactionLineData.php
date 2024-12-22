@@ -11,7 +11,5 @@ class TransactionLineData extends Data
         public float $debit,
         public float $credit,
         public ?string $description = null,
-    )
-    {
-    }
+    ) {}
 }

@@ -15,7 +15,5 @@ class CreateTransactionData extends Data
         public ?string $number = null,
         public ?string $description = null,
         public ?Model $reference = null,
-    )
-    {
-    }
+    ) {}
 }

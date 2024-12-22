@@ -15,7 +15,5 @@ class CreateAccountData extends Data
         public NormalBalance $normal_balance,
         public ?string $description = null,
         public ?int $parent_id = null,
-    )
-    {
-    }
+    ) {}
 }
