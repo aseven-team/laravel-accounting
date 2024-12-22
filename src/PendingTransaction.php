@@ -3,7 +3,7 @@
 namespace AsevenTeam\LaravelAccounting;
 
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
-use AsevenTeam\LaravelAccounting\Exceptions\UnbalanceTransaction;
+use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use DateTimeInterface;
@@ -101,7 +101,7 @@ class PendingTransaction
         $totalCredit = $this->lines->sum('credit');
 
         if ($totalDebit !== $totalCredit) {
-            throw UnbalanceTransaction::create();
+            throw UnbalancedTransaction::create();
         }
     }
 

@@ -2,7 +2,7 @@
 
 use AsevenTeam\LaravelAccounting\Exceptions\AccountDoesNotExist;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
-use AsevenTeam\LaravelAccounting\Exceptions\UnbalanceTransaction;
+use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use AsevenTeam\LaravelAccounting\Models\TransactionLine;
@@ -121,7 +121,7 @@ test('create transaction with unbalanced lines', function () {
         ->addLine($account1, 100, 0)
         ->addLine($account2, 0, 50)
         ->save();
-})->throws(UnbalanceTransaction::class);
+})->throws(UnbalancedTransaction::class);
 
 test('update transaction', function () {
     $account1 = Account::factory()->create();
