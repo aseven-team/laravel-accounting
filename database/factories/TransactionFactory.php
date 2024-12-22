@@ -4,7 +4,6 @@ namespace AsevenTeam\LaravelAccounting\Database\Factories;
 
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class TransactionFactory extends Factory
 {
