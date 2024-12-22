@@ -1,9 +1,11 @@
 <?php
 
+use AsevenTeam\LaravelAccounting\Enums\AccountStatus;
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
 use AsevenTeam\LaravelAccounting\Exceptions\AccountDoesNotExist;
 use AsevenTeam\LaravelAccounting\Models\Account;
+use Illuminate\Support\Carbon;
 
 test('to array', function () {
     $account = Account::factory()->create()->fresh();
@@ -15,8 +17,9 @@ test('to array', function () {
         'name',
         'type',
         'normal_balance',
-        'is_active',
         'description',
+        'status',
+        'archived_at',
         'created_at',
         'updated_at',
     ]);
@@ -32,6 +35,18 @@ test('normal balance cast', function () {
     $account = Account::factory()->create();
 
     expect($account->normal_balance)->toBeInstanceOf(NormalBalance::class);
+});
+
+test('status cast', function () {
+    $account = Account::factory()->create();
+
+    expect($account->status)->toBeInstanceOf(AccountStatus::class);
+});
+
+test('archived_at cast', function () {
+    $account = Account::factory()->create(['archived_at' => now()]);
+
+    expect($account->archived_at)->toBeInstanceOf(Carbon::class);
 });
 
 test('parent relationship', function () {

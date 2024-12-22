@@ -15,8 +15,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('type', 20);
             $table->string('normal_balance', 6);
-            $table->boolean('is_active')->default(true);
             $table->text('description')->nullable();
+            $table->string('status', 20);
+            $table->timestamp('archived_at')->nullable();
             $table->timestamps();
         });
 

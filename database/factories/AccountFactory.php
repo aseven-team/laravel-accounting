@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Database\Factories;
 
+use AsevenTeam\LaravelAccounting\Enums\AccountStatus;
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
 use AsevenTeam\LaravelAccounting\Models\Account;
@@ -18,9 +19,16 @@ class AccountFactory extends Factory
             'name' => $this->faker->name,
             'type' => $this->faker->randomElement(AccountType::cases()),
             'normal_balance' => $this->faker->randomElement(NormalBalance::cases()),
-            'is_active' => true,
+            'status' => AccountStatus::Active,
             'description' => null,
             'parent_id' => null,
         ];
+    }
+
+    public function archived(): static
+    {
+        return $this->state([
+            'status' => AccountStatus::Archived,
+        ]);
     }
 }

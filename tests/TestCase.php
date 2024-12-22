@@ -4,10 +4,13 @@ namespace AsevenTeam\LaravelAccounting\Tests;
 
 use AsevenTeam\LaravelAccounting\LaravelAccountingServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,9 +27,11 @@ class TestCase extends Orchestra
         ];
     }
 
-    public function getEnvironmentSetUp($app)
+    public function defineEnvironment($app)
     {
         config()->set('database.default', 'testing');
+
+        config()->set('data', require __DIR__.'/../vendor/spatie/laravel-data/config/data.php');
 
         $migration = include __DIR__.'/../database/migrations/create_accounting_tables.php';
         $migration->up();

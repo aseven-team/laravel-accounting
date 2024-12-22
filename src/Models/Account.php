@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Models;
 
+use AsevenTeam\LaravelAccounting\Enums\AccountStatus;
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
 use AsevenTeam\LaravelAccounting\Exceptions\AccountDoesNotExist;
@@ -39,7 +40,8 @@ class Account extends Model
         return [
             'type' => AccountType::class,
             'normal_balance' => NormalBalance::class,
-            'is_active' => 'boolean',
+            'status' => AccountStatus::class,
+            'archived_at' => 'datetime',
         ];
     }
 
@@ -52,6 +54,11 @@ class Account extends Model
         }
 
         return $account;
+    }
+
+    public function transactionLines(): HasMany
+    {
+        return $this->hasMany(TransactionLine::class);
     }
 
     public function parent(): BelongsTo
