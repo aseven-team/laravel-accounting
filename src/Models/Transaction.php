@@ -4,6 +4,7 @@ namespace AsevenTeam\LaravelAccounting\Models;
 
 use AsevenTeam\LaravelAccounting\Concerns\AutoSetNumber;
 use AsevenTeam\LaravelAccounting\Contracts\HasNumber;
+use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -48,5 +49,10 @@ class Transaction extends Model implements HasNumber
     public function lines(): HasMany
     {
         return $this->hasMany(TransactionLine::class, 'transaction_id');
+    }
+
+    public function newEloquentBuilder($query): TransactionQueryBuilder
+    {
+        return new TransactionQueryBuilder($query);
     }
 }
