@@ -17,7 +17,7 @@ class ListAccounts extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->modalWidth('lg')
-                ->action(function (array $data) {
+                ->using(function (array $data) {
                     return app(CreateAccount::class)->handle(CreateAccountData::from($data));
                 }),
         ];

@@ -24,27 +24,32 @@ class AccountResource extends Resource
     {
         return $form
             ->columns(1)
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('code')
-                    ->required()
-                    ->maxLength(20)
-                    ->unique(Account::class, ignoreRecord: true),
-                Forms\Components\Select::make('type')
-                    ->options(AccountType::class)
-                    ->disabledOn('edit')
-                    ->required(),
-                Forms\Components\Select::make('normal_balance')
-                    ->options(NormalBalance::class)
-                    ->disabledOn('edit')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
-                    ->rows(3)
-                    ->nullable()
-                    ->maxLength(1000),
-            ]);
+            ->schema(self::getFormSchema());
+    }
+
+    public static function getFormSchema(): array
+    {
+        return [
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+            Forms\Components\TextInput::make('code')
+                ->required()
+                ->maxLength(20)
+                ->unique(Account::class, ignoreRecord: true),
+            Forms\Components\Select::make('type')
+                ->options(AccountType::class)
+                ->disabledOn('edit')
+                ->required(),
+            Forms\Components\Select::make('normal_balance')
+                ->options(NormalBalance::class)
+                ->disabledOn('edit')
+                ->required(),
+            Forms\Components\Textarea::make('description')
+                ->rows(3)
+                ->nullable()
+                ->maxLength(1000),
+        ];
     }
 
     public static function infolist(Infolist $infolist): Infolist

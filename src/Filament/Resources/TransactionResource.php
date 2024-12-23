@@ -2,6 +2,8 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
+use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
+use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
@@ -85,7 +87,18 @@ class TransactionResource extends Resource
                                             });
                                     })
                                     ->required()
-                                    ->searchable(),
+                                    ->searchable()
+                                    ->createOptionForm(AccountResource::getFormSchema())
+                                    ->createOptionUsing(function (array $data) {
+                                        $account = app(CreateAccount::class)->handle(CreateAccountData::from($data));
+
+                                        return $account->id;
+                                    })
+                                    ->createOptionAction(function (Forms\Components\Actions\Action $action) {
+                                        return $action
+                                            ->modalWidth('lg')
+                                            ->modalHeading(__('Create Account'));
+                                    }),
                                 Forms\Components\TextInput::make('description')
                                     ->maxLength(200),
                                 MoneyInput::make('debit')
