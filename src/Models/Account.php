@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property AccountType $type
  * @property NormalBalance $normal_balance
- * @property bool $is_active
+ * @property AccountStatus $status
  * @property ?string $description
  * @property Carbon $created_at
  * @property Carbon $updated_at
