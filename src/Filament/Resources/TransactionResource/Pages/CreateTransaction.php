@@ -29,7 +29,7 @@ class CreateTransaction extends CreateRecord
                 'description' => $data['description'],
                 'lines' => $data['lines'],
             ]));
-        } catch (EmptyTransaction | UnbalancedTransaction $exception) {
+        } catch (EmptyTransaction|UnbalancedTransaction $exception) {
             Notification::make()
                 ->danger()
                 ->title(__($exception->getMessage()))

@@ -7,8 +7,8 @@ use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsActive;
 use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsArchived;
 use AsevenTeam\LaravelAccounting\Enums\AccountStatus;
 use AsevenTeam\LaravelAccounting\Exceptions\AccountHasTransactionsException;
-use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
+use AsevenTeam\LaravelAccounting\Models\Account;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

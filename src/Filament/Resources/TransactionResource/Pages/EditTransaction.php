@@ -6,8 +6,8 @@ use AsevenTeam\LaravelAccounting\Actions\Transaction\UpdateTransaction;
 use AsevenTeam\LaravelAccounting\Data\Transaction\UpdateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
-use AsevenTeam\LaravelAccounting\Models\Transaction;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
+use AsevenTeam\LaravelAccounting\Models\Transaction;
 use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
@@ -40,7 +40,7 @@ class EditTransaction extends EditRecord
                 'description' => $data['description'],
                 'lines' => $data['lines'],
             ]));
-        } catch (EmptyTransaction | UnbalancedTransaction $exception) {
+        } catch (EmptyTransaction|UnbalancedTransaction $exception) {
             Notification::make()
                 ->danger()
                 ->title(__($exception->getMessage()))

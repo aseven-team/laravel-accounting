@@ -4,8 +4,8 @@ namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
-use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
+use AsevenTeam\LaravelAccounting\Models\Account;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Infolists;

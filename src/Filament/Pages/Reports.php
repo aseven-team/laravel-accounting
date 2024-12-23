@@ -13,7 +13,7 @@ class Reports extends Page
 
     public static function getNavigationItemActiveRoutePattern(): string
     {
-        return static::getRouteName() . '*';
+        return static::getRouteName().'*';
     }
 
     public function reports(): array

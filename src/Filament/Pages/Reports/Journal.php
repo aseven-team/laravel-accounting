@@ -2,9 +2,9 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 
-use AsevenTeam\LaravelAccounting\Models\Transaction;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Concerns\HasFilters;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
+use AsevenTeam\LaravelAccounting\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
@@ -21,7 +21,7 @@ class Journal extends Page
 
     public static function getSlug(): string
     {
-        return Reports::getSlug() . '/' . parent::getSlug();
+        return Reports::getSlug().'/'.parent::getSlug();
     }
 
     public function getBreadcrumbs(): array
