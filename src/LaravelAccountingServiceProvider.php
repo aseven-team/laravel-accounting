@@ -11,6 +11,7 @@ class LaravelAccountingServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-accounting')
+            ->hasViews()
             ->hasConfigFile()
             ->hasMigrations('create_accounting_tables');
     }
