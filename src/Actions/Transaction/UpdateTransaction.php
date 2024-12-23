@@ -6,32 +6,35 @@ use AsevenTeam\LaravelAccounting\Data\Transaction\UpdateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class UpdateTransaction
 {
     public function handle(Transaction $transaction, UpdateTransactionData $data): Transaction
     {
-        if ($data->lines->isEmpty()) {
-            throw EmptyTransaction::create();
-        }
+        return DB::transaction(function () use ($transaction, $data) {
+            if ($data->lines->isEmpty()) {
+                throw EmptyTransaction::create();
+            }
 
-        if (! $data->lines->balanced()) {
-            throw UnbalancedTransaction::create();
-        }
+            if (! $data->lines->balanced()) {
+                throw UnbalancedTransaction::create();
+            }
 
-        $transaction->update([
-            'number' => $data->number,
-            'date' => $data->date,
-            'description' => $data->description,
-        ]);
+            $transaction->update([
+                'number' => $data->number,
+                'date' => $data->date,
+                'description' => $data->description,
+            ]);
 
-        if ($data->reference) {
-            $transaction->reference()->associate($data->reference);
-        }
+            if ($data->reference) {
+                $transaction->reference()->associate($data->reference);
+            }
 
-        $transaction->lines()->delete();
-        $transaction->lines()->createMany($data->lines->toArray());
+            $transaction->lines()->delete();
+            $transaction->lines()->createMany($data->lines->toArray());
 
-        return $transaction;
+            return $transaction;
+        });
     }
 }
