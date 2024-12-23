@@ -2,6 +2,13 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.1.2 - 2024-12-23
+
+- Add create account form in transaction form
+- Fix create another bug in account form
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.1.1...v1.1.2
+
 ## v1.1.1 - 2024-12-23
 
 - fix error when building css
