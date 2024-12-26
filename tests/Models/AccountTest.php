@@ -26,25 +26,25 @@ test('to array', function () {
 });
 
 test('type cast', function () {
-    $account = Account::factory()->create();
+    $account = Account::factory()->create()->fresh();
 
     expect($account->type)->toBeInstanceOf(AccountType::class);
 });
 
 test('normal balance cast', function () {
-    $account = Account::factory()->create();
+    $account = Account::factory()->create()->fresh();
 
     expect($account->normal_balance)->toBeInstanceOf(NormalBalance::class);
 });
 
 test('status cast', function () {
-    $account = Account::factory()->create();
+    $account = Account::factory()->create()->fresh();
 
     expect($account->status)->toBeInstanceOf(AccountStatus::class);
 });
 
 test('archived_at cast', function () {
-    $account = Account::factory()->create(['archived_at' => now()]);
+    $account = Account::factory()->create(['archived_at' => now()])->fresh();
 
     expect($account->archived_at)->toBeInstanceOf(Carbon::class);
 });

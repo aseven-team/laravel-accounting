@@ -33,6 +33,8 @@ class CreateTransaction
 
             $transaction->lines()->createMany($data->lines->toArray());
 
+            app(PostTransactionToLedger::class)->handle($transaction);
+
             return $transaction;
         });
     }

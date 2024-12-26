@@ -3,6 +3,7 @@
 namespace AsevenTeam\LaravelAccounting\Filament;
 
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
+use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
@@ -27,6 +28,7 @@ class LaravelAccountingFilamentPlugin implements Plugin
             ->pages([
                 Reports::class,
                 Journal::class,
+                GeneralLedger::class,
             ]);
     }
 

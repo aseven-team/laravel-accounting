@@ -4,16 +4,6 @@
             <a href="{{ $report['url'] }}">
                 <x-filament::section>
                     <div class="flex items-start gap-4">
-                        <div class="flex-1 grid gap-2">
-                            <x-filament::section.heading>
-                                {{ $report['title'] }}
-                            </x-filament::section.heading>
-
-                            <x-filament::section.description>
-                                {{ $report['description'] }}
-                            </x-filament::section.description>
-                        </div>
-
                         <div
                             @class([
                                 'inline-block rounded-lg p-3',
@@ -30,6 +20,16 @@
                             ])
                         >
                             <x-filament::icon :icon="$report['icon']" class="h-6 w-6" />
+                        </div>
+
+                        <div class="flex-1 grid gap-1">
+                            <x-filament::section.heading>
+                                {{ $report['title'] }}
+                            </x-filament::section.heading>
+
+                            <x-filament::section.description>
+                                {{ $report['description'] }}
+                            </x-filament::section.description>
                         </div>
                     </div>
                 </x-filament::section>

@@ -102,11 +102,11 @@ class TransactionResource extends Resource
                                 Forms\Components\TextInput::make('description')
                                     ->maxLength(200),
                                 MoneyInput::make('debit')
-                                    ->placeholder(0)
+                                    ->placeholder('0')
                                     ->dehydrateStateUsing(fn ($state) => $state ?? 0)
                                     ->live(onBlur: true),
                                 MoneyInput::make('credit')
-                                    ->placeholder(0)
+                                    ->placeholder('0')
                                     ->dehydrateStateUsing(fn ($state) => $state ?? 0)
                                     ->live(onBlur: true),
                             ]),

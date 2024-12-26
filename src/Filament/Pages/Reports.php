@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages;
 
+use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
 use Filament\Pages\Page;
 
@@ -25,6 +26,13 @@ class Reports extends Page
                 'url' => Journal::getUrl(),
                 'icon' => 'heroicon-o-document-text',
                 'iconColor' => 'info',
+            ],
+            [
+                'title' => __('General Ledger'),
+                'description' => __('View a list of all accounts.'),
+                'url' => GeneralLedger::getUrl(),
+                'icon' => 'heroicon-o-document-text',
+                'iconColor' => 'success',
             ],
         ];
     }

@@ -20,7 +20,7 @@ test('to array', function () {
 });
 
 test('date cast', function () {
-    $transaction = Transaction::factory()->create();
+    $transaction = Transaction::factory()->create()->fresh();
 
     expect($transaction->date)->toBeInstanceOf(Carbon::class);
 });

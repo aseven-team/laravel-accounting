@@ -5,6 +5,7 @@ namespace AsevenTeam\LaravelAccounting\Models;
 use AsevenTeam\LaravelAccounting\Concerns\AutoSetNumber;
 use AsevenTeam\LaravelAccounting\Contracts\HasNumber;
 use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property ?string $description
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read string $title
  * @property-read Model $reference
  * @property-read Collection<int, TransactionLine> $lines
  */
@@ -39,6 +41,11 @@ class Transaction extends Model implements HasNumber
         return [
             'date' => 'date',
         ];
+    }
+
+    public function title(): Attribute
+    {
+        return Attribute::get(fn () => sprintf('Journal Entry #%s', $this->number));
     }
 
     public function reference(): MorphTo

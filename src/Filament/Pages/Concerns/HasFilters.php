@@ -21,9 +21,10 @@ trait HasFilters
 
     public function mountHasFilters(): void
     {
-        if (empty($this->filters)) {
-            $this->filters = $this->getDefaultFilters();
-        }
+        $this->filters = array_merge(
+            $this->getDefaultFilters(),
+            $this->filters,
+        );
 
         $this->filtersForm->fill($this->filters);
     }
@@ -36,6 +37,13 @@ trait HasFilters
     public function applyFilters(): void
     {
         $this->filters = $this->filtersForm->getState();
+
+        $this->afterFiltersApplied();
+    }
+
+    protected function afterFiltersApplied(): void
+    {
+        //
     }
 
     abstract protected function filtersForm(Form $form): Form;
@@ -52,7 +60,7 @@ trait HasFilters
 
     protected function applyFiltersAction(): Action
     {
-        return Action::make('apply_filter')
+        return Action::make('filter')
             ->translateLabel()
             ->button()
             ->action('applyFilters');

@@ -34,7 +34,7 @@ class EditTransaction extends EditRecord
         assert($record instanceof Transaction);
 
         try {
-            return app(UpdateTransaction::class)->handle($record, UpdateTransactionData::from([
+            $transaction = app(UpdateTransaction::class)->handle($record, UpdateTransactionData::from([
                 'date' => Carbon::parse($data['date']),
                 'number' => $data['number'],
                 'description' => $data['description'],
@@ -46,8 +46,10 @@ class EditTransaction extends EditRecord
                 ->title(__($exception->getMessage()))
                 ->send();
 
-            $this->halt();
+            throw new Halt();
         }
+
+        return $transaction;
     }
 
     protected function getRedirectUrl(): ?string
