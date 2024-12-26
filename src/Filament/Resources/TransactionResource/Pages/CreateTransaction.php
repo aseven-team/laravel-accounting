@@ -35,7 +35,7 @@ class CreateTransaction extends CreateRecord
                 ->title(__($exception->getMessage()))
                 ->send();
 
-            throw new Halt();
+            throw new Halt;
         }
 
         return $transaction;

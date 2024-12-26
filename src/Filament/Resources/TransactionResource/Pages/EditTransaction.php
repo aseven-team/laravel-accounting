@@ -46,7 +46,7 @@ class EditTransaction extends EditRecord
                 ->title(__($exception->getMessage()))
                 ->send();
 
-            throw new Halt();
+            throw new Halt;
         }
 
         return $transaction;
