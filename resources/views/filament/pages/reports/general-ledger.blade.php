@@ -56,9 +56,9 @@
                     $code = $account['code'];
                 @endphp
 
-                <x-accounting::table.row
+                <x-accounting::table.group-row
                     @click="toggleGroup('{{ $code }}')"
-                    class="bg-gray-50 dark:bg-white/5 cursor-pointer"
+                    class="cursor-pointer"
                 >
                     <x-accounting::table.cell colspan="7">
                         <div class="flex items-center gap-2">
@@ -72,7 +72,7 @@
                             ({{ $account['code'] }}) {{ $account['name'] }}
                         </div>
                     </x-accounting::table.cell>
-                </x-accounting::table.row>
+                </x-accounting::table.group-row>
 
                 <x-accounting::table.row x-show="isGroupExpanded('{{ $code }}')">
                     <x-accounting::table.cell colspan="5" class="text-right font-semibold">

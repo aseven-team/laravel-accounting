@@ -1,81 +1,64 @@
+@php
+    use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
+@endphp
+
 <x-accounting::report-page>
-    <x-filament-tables::table>
-        <x-slot:header>
-            <x-filament-tables::header-cell>
-                Account
-            </x-filament-tables::header-cell>
-            <x-filament-tables::header-cell alignment="end">
-                Debit
-            </x-filament-tables::header-cell>
-            <x-filament-tables::header-cell alignment="end">
-                Credit
-            </x-filament-tables::header-cell>
-        </x-slot:header>
+    <x-accounting::table>
+        <x-accounting::table.header>
+            <x-accounting::table.header-row :darker="true">
+                <x-accounting::table.header-cell>
+                    Account
+                </x-accounting::table.header-cell>
+                <x-accounting::table.header-cell alignment="end">
+                    Debit
+                </x-accounting::table.header-cell>
+                <x-accounting::table.header-cell alignment="end">
+                    Credit
+                </x-accounting::table.header-cell>
+            </x-accounting::table.header-row>
+        </x-accounting::table.header>
 
-        @foreach($this->transactions as $transaction)
-            <x-filament-tables::row class="bg-gray-50 dark:bg-white/5">
-                <x-filament-tables::cell colspan="3">
-                    <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                        <span class="fi-ta-text-item-label text-sm leading-6 text-gray-950 dark:text-white">
-                            Journal Entry #{{ $transaction->number }} - {{ $transaction->date->format('d/m/Y') }}
-                        </span>
-                    </div>
-                </x-filament-tables::cell>
-            </x-filament-tables::row>
+        <x-accounting::table.body>
+            @foreach($this->transactions as $transaction)
+                <x-accounting::table.group-row>
+                    <x-accounting::table.cell colspan="3">
+                        <x-filament::link :href="TransactionResource::getUrl('view', ['record' => $transaction])">
+                            {{ $transaction->title }}
+                        </x-filament::link>
+                        - {{ $transaction->date->format('d/m/Y') }}
+                    </x-accounting::table.cell>
+                </x-accounting::table.group-row>
 
-            @foreach($transaction->lines as $line)
-                <x-filament-tables::row>
-                    <x-filament-tables::cell>
-                        <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                            <span class="fi-ta-text-item-label text-sm leading-6 text-gray-950 dark:text-white">
-                                {{ $line->account->code }} - {{ $line->account->name }}
-                            </span>
-                        </div>
-                    </x-filament-tables::cell>
+                @foreach($transaction->lines as $line)
+                    <x-accounting::table.row>
+                        <x-accounting::table.cell>
+                            {{ $line->account->code }} - {{ $line->account->name }}
+                        </x-accounting::table.cell>
 
-                    <x-filament-tables::cell>
-                        <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                            <span class="fi-ta-text-item-label text-right text-sm leading-6 text-gray-950 dark:text-white">
-                                {{ Number::format($line->debit, precision: 2, locale: 'id') }}
-                            </span>
-                        </div>
-                    </x-filament-tables::cell>
+                        <x-accounting::table.cell class="text-right">
+                            {{ Number::format($line->debit, precision: 2, locale: 'id') }}
+                        </x-accounting::table.cell>
 
-                    <x-filament-tables::cell>
-                        <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                            <span class="fi-ta-text-item-label text-right text-sm leading-6 text-gray-950 dark:text-white">
-                                {{ Number::format($line->credit, precision: 2, locale: 'id') }}
-                            </span>
-                        </div>
-                    </x-filament-tables::cell>
-                </x-filament-tables::row>
+                        <x-accounting::table.cell class="text-right">
+                            {{ Number::format($line->credit, precision: 2, locale: 'id') }}
+                        </x-accounting::table.cell>
+                    </x-accounting::table.row>
+                @endforeach
+
+                <x-accounting::table.row>
+                    <x-accounting::table.cell class="text-right font-semibold">
+                        Total
+                    </x-accounting::table.cell>
+
+                    <x-accounting::table.cell class="text-right font-semibold">
+                        {{ Number::format($transaction->lines->sum('debit'), precision: 2, locale: 'id') }}
+                    </x-accounting::table.cell>
+
+                    <x-accounting::table.cell class="text-right font-semibold">
+                        {{ Number::format($transaction->lines->sum('credit'), precision: 2, locale: 'id') }}
+                    </x-accounting::table.cell>
+                </x-accounting::table.row>
             @endforeach
-
-            <x-filament-tables::row>
-                <x-filament-tables::cell>
-                    <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                        <span class="fi-ta-text-item-label text-right text-sm font-semibold leading-6 text-gray-950 dark:text-white">
-                            Total
-                        </span>
-                    </div>
-                </x-filament-tables::cell>
-
-                <x-filament-tables::cell>
-                    <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                        <span class="fi-ta-text-item-label text-right text-sm font-semibold leading-6 text-gray-950 dark:text-white">
-                            {{ Number::format($transaction->lines->sum('debit'), precision: 2, locale: 'id') }}
-                        </span>
-                    </div>
-                </x-filament-tables::cell>
-
-                <x-filament-tables::cell class="text-right">
-                    <div class="fi-ta-text grid w-full gap-y-1 px-3 py-3">
-                        <span class="fi-ta-text-item-label text-sm font-semibold leading-6 text-gray-950 dark:text-white">
-                            {{ Number::format($transaction->lines->sum('credit'), precision: 2, locale: 'id') }}
-                        </span>
-                    </div>
-                </x-filament-tables::cell>
-            </x-filament-tables::row>
-        @endforeach
-    </x-filament-tables::table>
+        </x-accounting::table.body>
+    </x-accounting::table>
 </x-accounting::report-page>
