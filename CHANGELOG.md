@@ -2,6 +2,14 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.2.0 - 2024-12-27
+
+- Add General Ledger Report
+- Improve Account Resource
+- Refactoring reports blade view
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.1.2...v1.2.0
+
 ## v1.1.2 - 2024-12-23
 
 - Add create account form in transaction form
