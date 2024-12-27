@@ -5,6 +5,7 @@ use AsevenTeam\LaravelAccounting\Data\Transaction\CreateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
+use AsevenTeam\LaravelAccounting\Models\Ledger;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 
 test('create transaction', function () {
@@ -149,4 +150,27 @@ test('create unbalanced transaction', function () {
             ],
         ]));
     })->toThrow(UnbalancedTransaction::class);
+});
+
+test('creating transaction always post to ledger', function () {
+    $account1 = Account::factory()->create();
+    $account2 = Account::factory()->create();
+
+    $transaction = app(CreateTransaction::class)->handle(CreateTransactionData::from([
+        'date' => now(),
+        'lines' => [
+            [
+                'account_id' => $account1->id,
+                'debit' => 100,
+                'credit' => 0,
+            ],
+            [
+                'account_id' => $account2->id,
+                'debit' => 0,
+                'credit' => 100,
+            ],
+        ],
+    ]));
+
+    expect(Ledger::where('transaction_id', $transaction->id)->count())->toBe(2);
 });

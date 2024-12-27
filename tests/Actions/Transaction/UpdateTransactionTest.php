@@ -1,11 +1,14 @@
 <?php
 
+use AsevenTeam\LaravelAccounting\Actions\Transaction\PostTransactionToLedger;
 use AsevenTeam\LaravelAccounting\Actions\Transaction\UpdateTransaction;
 use AsevenTeam\LaravelAccounting\Data\Transaction\UpdateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
+use AsevenTeam\LaravelAccounting\Models\Ledger;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
+use AsevenTeam\LaravelAccounting\Models\TransactionLine;
 
 test('update transaction', function () {
     $transaction = Transaction::factory()->create();
@@ -79,4 +82,40 @@ test('update transaction with unbalanced lines', function () {
             ],
         ],
     ])))->toThrow(UnbalancedTransaction::class);
+});
+
+test('updating transaction also updates the ledger', function () {
+    $transaction = Transaction::factory()->create();
+    $line1 = TransactionLine::factory()->for($transaction)->debit()->create(['debit' => 1000]);
+    $line2 = TransactionLine::factory()->for($transaction)->credit()->create(['credit' => 1000]);
+
+    app(PostTransactionToLedger::class)->handle($transaction);
+
+    $transaction = app(UpdateTransaction::class)->handle($transaction, UpdateTransactionData::from([
+        'date' => now(),
+        'lines' => [
+            [
+                'account_id' => $line1->account_id,
+                'debit' => 2000,
+                'credit' => 0,
+            ],
+            [
+                'account_id' => $line2->account_id,
+                'debit' => 0,
+                'credit' => 2000,
+            ],
+        ],
+    ]));
+
+    $ledgers = Ledger::all();
+
+    expect($ledgers->count())->toBe(2)
+        ->and($ledgers->first()->transaction_id)->toBe($transaction->id)
+        ->and($ledgers->first()->account_id)->toBe($line1->account_id)
+        ->and($ledgers->first()->debit)->toBe(2000)
+        ->and($ledgers->first()->credit)->toBe(0)
+        ->and($ledgers->last()->transaction_id)->toBe($transaction->id)
+        ->and($ledgers->last()->account_id)->toBe($line2->account_id)
+        ->and($ledgers->last()->debit)->toBe(0)
+        ->and($ledgers->last()->credit)->toBe(2000);
 });

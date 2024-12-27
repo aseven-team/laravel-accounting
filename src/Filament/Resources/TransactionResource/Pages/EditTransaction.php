@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 
+use AsevenTeam\LaravelAccounting\Actions\Transaction\DeleteTransaction;
 use AsevenTeam\LaravelAccounting\Actions\Transaction\UpdateTransaction;
 use AsevenTeam\LaravelAccounting\Data\Transaction\UpdateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
@@ -22,7 +23,10 @@ class EditTransaction extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            DeleteAction::make(),
+            DeleteAction::make()
+                ->using(function (Transaction $record): bool {
+                    return app(DeleteTransaction::class)->handle($record);
+                }),
         ];
     }
 
