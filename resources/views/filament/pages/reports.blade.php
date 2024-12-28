@@ -27,7 +27,7 @@
                                 {{ $report['title'] }}
                             </x-filament::section.heading>
 
-                            <x-filament::section.description>
+                            <x-filament::section.description class="line-clamp-2 text-ellipsis">
                                 {{ $report['description'] }}
                             </x-filament::section.description>
                         </div>

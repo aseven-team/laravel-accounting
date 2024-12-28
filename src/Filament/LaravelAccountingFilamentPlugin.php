@@ -5,6 +5,7 @@ namespace AsevenTeam\LaravelAccounting\Filament;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
+use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\TrialBalance;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Contracts\Plugin;
@@ -29,6 +30,7 @@ class LaravelAccountingFilamentPlugin implements Plugin
                 Reports::class,
                 Journal::class,
                 GeneralLedger::class,
+                TrialBalance::class,
             ]);
     }
 
