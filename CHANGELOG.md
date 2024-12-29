@@ -2,6 +2,12 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## 1.3.0 - 2024-12-29
+
+- Add trial balance report
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.2.0...1.3.0
+
 ## v1.2.0 - 2024-12-27
 
 - Add General Ledger Report
