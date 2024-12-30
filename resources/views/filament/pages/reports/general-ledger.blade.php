@@ -1,5 +1,7 @@
 @php
+    use AsevenTeam\LaravelAccounting\Data\Report\Ledger\AccountLedgerData;
     use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
+    use Illuminate\Support\Collection;
 @endphp
 
 <x-accounting::report-page>
@@ -51,47 +53,48 @@
         </x-accounting::table.header>
 
         <x-accounting::table.body>
-            @foreach($this->accounts as $account)
-                @php
-                    $code = $account['code'];
-                @endphp
+            @php
+                /** @var Collection<int, AccountLedgerData> $reports */
+                $reports = $this->reports;
+            @endphp
 
+            @foreach($reports as $report)
                 <x-accounting::table.group-row
-                    @click="toggleGroup('{{ $code }}')"
+                    @click="toggleGroup('{{ $report->account_code }}')"
                     class="cursor-pointer"
                 >
                     <x-accounting::table.cell colspan="7">
                         <div class="flex items-center gap-2">
-                            <template x-if="isGroupExpanded('{{ $code }}')">
+                            <template x-if="isGroupExpanded('{{ $report->account_code }}')">
                                 <x-filament::icon icon="heroicon-o-chevron-up" class="h-4 w-4" />
                             </template>
-                            <template x-if="! isGroupExpanded('{{ $code }}')">
+                            <template x-if="! isGroupExpanded('{{ $report->account_code }}')">
                                 <x-filament::icon icon="heroicon-o-chevron-down" class="h-4 w-4" />
                             </template>
 
-                            ({{ $account['code'] }}) {{ $account['name'] }}
+                            ({{ $report->account_code }}) {{ $report->account_name }}
                         </div>
                     </x-accounting::table.cell>
                 </x-accounting::table.group-row>
 
-                <x-accounting::table.row x-show="isGroupExpanded('{{ $code }}')">
+                <x-accounting::table.row x-show="isGroupExpanded('{{ $report->account_code }}')">
                     <x-accounting::table.cell colspan="5" class="text-right font-semibold">
                         Starting balance
                     </x-accounting::table.cell>
 
                     <x-accounting::table.cell class="text-right font-semibold">
-                        {{ Number::format($account['starting_debit_balance'], precision: 2, locale: 'id') }}
+                        {{ Number::format($report->starting_debit_balance, precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
 
                     <x-accounting::table.cell class="text-right font-semibold">
-                        {{ Number::format($account['starting_credit_balance'], precision: 2, locale: 'id') }}
+                        {{ Number::format($report->starting_credit_balance, precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
                 </x-accounting::table.row>
 
-                @foreach($account['ledgers'] as $ledger)
-                    <x-accounting::table.row x-show="isGroupExpanded('{{ $code }}')">
+                @foreach($report->ledgers as $ledger)
+                    <x-accounting::table.row x-show="isGroupExpanded('{{ $report->account_code }}')">
                         <x-accounting::table.cell>
-                            {{ $ledger->date->format('d/M/Y') }}
+                            {{ $ledger->transaction_date->format('d/M/Y') }}
                         </x-accounting::table.cell>
 
                         <x-accounting::table.cell>
@@ -128,11 +131,11 @@
                     </x-accounting::table.cell>
 
                     <x-accounting::table.cell class="text-right font-semibold">
-                        {{ Number::format($account['ending_debit_balance'], precision: 2, locale: 'id') }}
+                        {{ Number::format($report->ending_debit_balance, precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
 
                     <x-accounting::table.cell class="text-right font-semibold">
-                        {{ Number::format($account['ending_credit_balance'], precision: 2, locale: 'id') }}
+                        {{ Number::format($report->ending_credit_balance, precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
                 </x-accounting::table.row>
             @endforeach

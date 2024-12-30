@@ -44,8 +44,8 @@ test('balance calculation', function () {
     $ledger1 = Ledger::where('account_id', $account1->id)->latest('id')->first();
     $ledger2 = Ledger::where('account_id', $account2->id)->latest('id')->first();
 
-    expect($ledger1->debit_balance)->toBe(round($line1->debit + $line3->debit, 2))
-        ->and($ledger1->credit_balance)->toBe(0)
-        ->and($ledger2->debit_balance)->toBe(0)
-        ->and($ledger2->credit_balance)->toBe(round($line2->credit + $line4->credit, 2));
+    expect($ledger1->debit_balance)->toEqual(round($line1->debit + $line3->debit, 2))
+        ->and($ledger1->credit_balance)->toEqual(0)
+        ->and($ledger2->debit_balance)->toEqual(0)
+        ->and($ledger2->credit_balance)->toEqual(round($line2->credit + $line4->credit, 2));
 });

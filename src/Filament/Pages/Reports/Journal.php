@@ -2,8 +2,8 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 
-use AsevenTeam\LaravelAccounting\Models\Transaction;
-use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
+use AsevenTeam\LaravelAccounting\Data\Report\Journal\JournalEntryData;
+use AsevenTeam\LaravelAccounting\Services\ReportService;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 
@@ -13,11 +13,14 @@ class Journal extends BaseReport
 
     protected function clearCachedReport(): void
     {
-        unset($this->transactions);
+        unset($this->reports);
     }
 
+    /**
+     * @return Collection<int, JournalEntryData>
+     */
     #[Computed(persist: true)]
-    public function transactions(): Collection
+    public function reports(): Collection
     {
         if (! $this->reportLoaded) {
             return collect();
@@ -26,12 +29,6 @@ class Journal extends BaseReport
         $from = @$this->filters['start_date'];
         $to = @$this->filters['end_date'];
 
-        return Transaction::query()
-            ->with('lines.account')
-            ->when($from && $to, function (TransactionQueryBuilder $query) use ($from, $to) {
-                $query->period($from, $to);
-            })
-            ->orderBy('date')
-            ->get();
+        return app(ReportService::class)->getJournalReport($from, $to);
     }
 }
