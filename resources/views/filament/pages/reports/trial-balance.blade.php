@@ -1,7 +1,7 @@
 <x-accounting::report-page>
     <x-accounting::table>
         <x-accounting::table.header>
-            <x-accounting::table.header-row>
+            <x-accounting::table.header-row :darker="true">
                 <x-accounting::table.header-cell rowspan="2" alignment="center">
                     Account
                 </x-accounting::table.header-cell>
@@ -16,7 +16,7 @@
                 </x-accounting::table.header-cell>
             </x-accounting::table.header-row>
 
-            <x-accounting::table.header-row>
+            <x-accounting::table.header-row :darker="true">
                 <x-accounting::table.header-cell alignment="center">
                     {{ __('Debit') }}
                 </x-accounting::table.header-cell>
