@@ -79,11 +79,11 @@
                         Starting balance
                     </x-accounting::table.cell>
 
-                    <x-accounting::table.cell class="text-right">
+                    <x-accounting::table.cell class="text-right font-semibold">
                         {{ Number::format($account['starting_debit_balance'], precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
 
-                    <x-accounting::table.cell class="text-right">
+                    <x-accounting::table.cell class="text-right font-semibold">
                         {{ Number::format($account['starting_credit_balance'], precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
                 </x-accounting::table.row>
@@ -127,11 +127,11 @@
                         Ending balance
                     </x-accounting::table.cell>
 
-                    <x-accounting::table.cell class="text-right">
+                    <x-accounting::table.cell class="text-right font-semibold">
                         {{ Number::format($account['ending_debit_balance'], precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
 
-                    <x-accounting::table.cell class="text-right">
+                    <x-accounting::table.cell class="text-right font-semibold">
                         {{ Number::format($account['ending_credit_balance'], precision: 2, locale: 'id') }}
                     </x-accounting::table.cell>
                 </x-accounting::table.row>
