@@ -21,7 +21,7 @@
         <x-accounting::table.header>
             <x-accounting::table.header-row :darker="true">
                 <x-accounting::table.header-cell rowspan="2">
-                    Account
+                    Date
                 </x-accounting::table.header-cell>
                 <x-accounting::table.header-cell rowspan="2">
                     Transaction
