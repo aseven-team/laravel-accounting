@@ -4,6 +4,7 @@ namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
+use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use Filament\Forms;
@@ -19,6 +20,13 @@ class AccountResource extends Resource
     protected static ?string $model = Account::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?int $navigationSort = 3;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
+    }
 
     public static function form(Form $form): Form
     {

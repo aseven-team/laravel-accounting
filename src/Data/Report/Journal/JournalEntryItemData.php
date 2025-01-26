@@ -11,7 +11,5 @@ class JournalEntryItemData extends Data
         public string $account_name,
         public float $debit,
         public float $credit,
-    )
-    {
-    }
+    ) {}
 }

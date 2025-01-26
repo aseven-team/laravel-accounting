@@ -5,6 +5,7 @@ namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
+use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
@@ -23,6 +24,13 @@ class TransactionResource extends Resource
     protected static ?string $slug = 'transactions';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?int $navigationSort = 2;
+
+    public static function getNavigationGroup(): ?string
+    {
+        return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
+    }
 
     public static function form(Form $form): Form
     {

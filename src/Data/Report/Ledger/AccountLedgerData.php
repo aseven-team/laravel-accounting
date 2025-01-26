@@ -16,7 +16,5 @@ class AccountLedgerData extends Data
         public float $ending_credit_balance,
         /** @var Collection<int, LedgerData> $ledgers */
         public Collection $ledgers,
-    )
-    {
-    }
+    ) {}
 }

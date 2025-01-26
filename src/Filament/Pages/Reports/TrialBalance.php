@@ -16,9 +16,6 @@ class TrialBalance extends BaseReport
         unset($this->report);
     }
 
-    /**
-     * @return TrialBalanceData
-     */
     #[Computed(persist: true)]
     public function report(): TrialBalanceData
     {

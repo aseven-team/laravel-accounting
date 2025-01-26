@@ -16,8 +16,6 @@ class ReportService
     /**
      * Get journal report
      *
-     * @param string|null $from
-     * @param string|null $to
      * @return Collection<int, JournalEntryData>
      */
     public function getJournalReport(?string $from, ?string $to): Collection
@@ -47,8 +45,6 @@ class ReportService
     /**
      * Get general ledger report
      *
-     * @param string|null $from
-     * @param string|null $to
      * @return Collection<int, AccountLedgerData>
      */
     public function getGeneralLedgerReport(?string $from, ?string $to): Collection
@@ -102,10 +98,6 @@ class ReportService
 
     /**
      * Get trial balance report
-     *
-     * @param string|null $from
-     * @param string|null $to
-     * @return TrialBalanceData
      */
     public function getTrialBalanceReport(?string $from, ?string $to): TrialBalanceData
     {

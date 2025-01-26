@@ -14,9 +14,7 @@ class JournalEntryData extends Data
         public Carbon $transaction_date,
         /** @var Collection<int, JournalEntryItemData> $items */
         public Collection $items,
-    )
-    {
-    }
+    ) {}
 
     public function totalDebit(): float
     {

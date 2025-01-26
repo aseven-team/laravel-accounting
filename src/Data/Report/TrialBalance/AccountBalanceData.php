@@ -15,7 +15,5 @@ class AccountBalanceData extends Data
         public float $credit_movement,
         public float $ending_debit_balance,
         public float $ending_credit_balance,
-    )
-    {
-    }
+    ) {}
 }

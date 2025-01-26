@@ -16,7 +16,5 @@ class LedgerData extends Data
         public float $credit,
         public float $debit_balance,
         public float $credit_balance,
-    )
-    {
-    }
+    ) {}
 }

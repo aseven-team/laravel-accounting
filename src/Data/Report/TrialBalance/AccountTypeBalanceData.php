@@ -11,7 +11,5 @@ class AccountTypeBalanceData extends Data
         public string $account_type,
         /** @var Collection<int, AccountBalanceData> $account_balances */
         public Collection $account_balances,
-    )
-    {
-    }
+    ) {}
 }

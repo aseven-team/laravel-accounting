@@ -16,7 +16,5 @@ class TrialBalanceData extends Data
         public float $total_credit_movement,
         public float $total_ending_debit_balance,
         public float $total_ending_credit_balance,
-    )
-    {
-    }
+    ) {}
 }

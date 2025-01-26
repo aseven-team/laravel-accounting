@@ -14,6 +14,8 @@ use Filament\Panel;
 
 class LaravelAccountingFilamentPlugin implements Plugin
 {
+    protected ?string $navigationGroup = null;
+
     public function getId(): string
     {
         return 'laravel-accounting';
@@ -39,6 +41,18 @@ class LaravelAccountingFilamentPlugin implements Plugin
         Field::configureUsing(function (Field $field) {
             $field->translateLabel();
         });
+    }
+
+    public function navigationGroup(string $navigationGroup): static
+    {
+        $this->navigationGroup = $navigationGroup;
+
+        return $this;
+    }
+
+    public function getNavigationGroup(): ?string
+    {
+        return $this->navigationGroup;
     }
 
     public static function make(): static

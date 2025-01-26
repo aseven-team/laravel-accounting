@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages;
 
+use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\TrialBalance;
@@ -13,9 +14,16 @@ class Reports extends Page
 
     protected static string $view = 'accounting::filament.pages.reports';
 
+    protected static ?int $navigationSort = 1;
+
     public static function getNavigationItemActiveRoutePattern(): string
     {
         return static::getRouteName().'*';
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
     }
 
     public function reports(): array
