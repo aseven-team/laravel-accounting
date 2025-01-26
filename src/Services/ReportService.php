@@ -32,7 +32,7 @@ class ReportService
                 'transaction_title' => $transaction->title,
                 'transaction_date' => $transaction->date,
                 'items' => $transaction->lines->map(fn ($line) => [
-                    'account_code' => $line->account->name,
+                    'account_code' => $line->account->code,
                     'account_name' => $line->account->name,
                     'debit' => $line->debit,
                     'credit' => $line->credit,
