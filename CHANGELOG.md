@@ -2,6 +2,12 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.3.2 - 2025-01-26
+
+- Fix journal report does not show account code
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.3.1...v1.3.2
+
 ## v1.3.1 - 2025-01-26
 
 - Configurable filament navigation group
