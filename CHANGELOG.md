@@ -2,6 +2,12 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.3.1 - 2025-01-26
+
+- Configurable filament navigation group
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/1.3.0...v1.3.1
+
 ## 1.3.0 - 2024-12-29
 
 - Add trial balance report
