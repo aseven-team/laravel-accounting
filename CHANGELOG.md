@@ -2,6 +2,12 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.4.0 - 2025-01-28
+
+- Add configurable models and table names
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.3.2...v1.4.0
+
 ## v1.3.2 - 2025-01-26
 
 - Fix journal report does not show account code
