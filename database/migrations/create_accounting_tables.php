@@ -8,9 +8,11 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        $tableNames = config('accounting.table_names');
+
+        Schema::create($tableNames['accounts'], function (Blueprint $table) use ($tableNames) {
             $table->id();
-            $table->foreignId('parent_id')->nullable()->constrained('accounts')->restrictOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained($tableNames['accounts'])->restrictOnDelete();
             $table->string('code', 20)->unique();
             $table->string('name');
             $table->string('type', 20);
@@ -21,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create($tableNames['transactions'], function (Blueprint $table) {
             $table->id();
             $table->nullableMorphs('reference');
             $table->unsignedBigInteger('sequence');
@@ -31,10 +33,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('transaction_lines', function (Blueprint $table) {
+        Schema::create($tableNames['transaction_lines'], function (Blueprint $table) use ($tableNames) {
             $table->id();
-            $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
-            $table->foreignId('account_id')->constrained('accounts')->restrictOnDelete();
+            $table->foreignId('transaction_id')->constrained($tableNames['transactions'])->cascadeOnDelete();
+            $table->foreignId('account_id')->constrained($tableNames['accounts'])->restrictOnDelete();
             $table->decimal('debit', 15, 2)->default(0);
             $table->decimal('credit', 15, 2)->default(0);
             $table->text('description')->nullable();

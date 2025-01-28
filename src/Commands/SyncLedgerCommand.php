@@ -3,8 +3,7 @@
 namespace AsevenTeam\LaravelAccounting\Commands;
 
 use AsevenTeam\LaravelAccounting\Actions\Transaction\PostTransactionToLedger;
-use AsevenTeam\LaravelAccounting\Models\Ledger;
-use AsevenTeam\LaravelAccounting\Models\Transaction;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
@@ -23,14 +22,14 @@ class SyncLedgerCommand extends Command
         $this->info('Clearing ledger...');
 
         if ($startDate) {
-            Ledger::query()->where('date', '>=', $startDate)->delete();
+            Accounting::getLedgerClass()::query()->where('date', '>=', $startDate)->delete();
         } else {
-            Ledger::query()->truncate();
+            Accounting::getLedgerClass()::query()->truncate();
         }
 
         $this->info('Syncing ledger...');
 
-        $transactions = Transaction::query()
+        $transactions = Accounting::getTransactionClass()::query()
             ->with('lines')
             ->when($startDate, fn ($query) => $query->where('date', '>=', $startDate))
             ->orderBy('date')

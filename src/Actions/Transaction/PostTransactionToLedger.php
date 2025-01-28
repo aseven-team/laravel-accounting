@@ -3,7 +3,7 @@
 namespace AsevenTeam\LaravelAccounting\Actions\Transaction;
 
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
-use AsevenTeam\LaravelAccounting\Models\Ledger;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +18,10 @@ class PostTransactionToLedger
             ]);
 
             foreach ($transaction->lines as $line) {
-                $latestLedger = Ledger::where('account_id', $line->account_id)->latest('id')->first();
+                $latestLedger = Accounting::getLedgerClass()::query()
+                    ->where('account_id', $line->account_id)
+                    ->latest('id')
+                    ->first();
 
                 $balance = match ($line->account->normal_balance) {
                     NormalBalance::Debit => $latestLedger?->debit_balance - $latestLedger?->credit_balance,
@@ -32,7 +35,7 @@ class PostTransactionToLedger
 
                 $balance = $balance + $addition;
 
-                Ledger::create([
+                Accounting::getLedgerClass()::create([
                     'transaction_id' => $transaction->id,
                     'transaction_line_id' => $line->id,
                     'account_id' => $line->account_id,

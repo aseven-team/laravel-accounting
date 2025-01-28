@@ -5,6 +5,7 @@ namespace AsevenTeam\LaravelAccounting\Services;
 use AsevenTeam\LaravelAccounting\Data\Report\Journal\JournalEntryData;
 use AsevenTeam\LaravelAccounting\Data\Report\Ledger\AccountLedgerData;
 use AsevenTeam\LaravelAccounting\Data\Report\TrialBalance\TrialBalanceData;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Models\Ledger;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
@@ -20,7 +21,7 @@ class ReportService
      */
     public function getJournalReport(?string $from, ?string $to): Collection
     {
-        $transactions = Transaction::query()
+        $transactions = Accounting::getTransactionClass()::query()
             ->with('lines.account')
             ->when($from && $to, function (TransactionQueryBuilder $query) use ($from, $to) {
                 $query->period($from, $to);
@@ -49,14 +50,14 @@ class ReportService
      */
     public function getGeneralLedgerReport(?string $from, ?string $to): Collection
     {
-        $startingBalances = Ledger::query()
+        $startingBalances = Accounting::getLedgerClass()::query()
             ->joinSub(
-                Ledger::query()
+                Accounting::getLedgerClass()::query()
                     ->selectRaw('max(id) as max_id')
                     ->where('date', '<', Carbon::parse($from)->startOfDay())
                     ->groupBy('account_id'),
                 'starting_balances',
-                'ledgers.id',
+                config('accounting.table_names.ledgers').'.id',
                 '=',
                 'starting_balances.max_id'
             )
@@ -64,7 +65,7 @@ class ReportService
             ->get()
             ->keyBy('account_id');
 
-        $ledgers = Ledger::query()
+        $ledgers = Accounting::getLedgerClass()::query()
             ->with('account:id,code,name')
             ->when($from && $to, function ($query) use ($from, $to) {
                 $query->where('date', '>=', Carbon::parse($from)->startOfDay())
@@ -101,14 +102,14 @@ class ReportService
      */
     public function getTrialBalanceReport(?string $from, ?string $to): TrialBalanceData
     {
-        $startingBalances = Ledger::query()
+        $startingBalances = Accounting::getLedgerClass()::query()
             ->joinSub(
-                Ledger::query()
+                Accounting::getLedgerClass()::query()
                     ->selectRaw('max(id) as max_id')
                     ->where('date', '<', Carbon::parse($from)->startOfDay())
                     ->groupBy('account_id'),
                 'starting_balances',
-                'ledgers.id',
+                config('accounting.table_names.ledgers').'.id',
                 '=',
                 'starting_balances.max_id'
             )
@@ -116,7 +117,7 @@ class ReportService
             ->get()
             ->keyBy('account_id');
 
-        $accountTypes = Ledger::query()
+        $accountTypes = Accounting::getLedgerClass()::query()
             ->with('account:id,code,name,type')
             ->when($from && $to, function ($query) use ($from, $to) {
                 $query->where('date', '>=', Carbon::parse($from)->startOfDay())
