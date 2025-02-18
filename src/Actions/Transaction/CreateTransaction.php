@@ -5,6 +5,7 @@ namespace AsevenTeam\LaravelAccounting\Actions\Transaction;
 use AsevenTeam\LaravelAccounting\Data\Transaction\CreateTransactionData;
 use AsevenTeam\LaravelAccounting\Exceptions\EmptyTransaction;
 use AsevenTeam\LaravelAccounting\Exceptions\UnbalancedTransaction;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,7 @@ class CreateTransaction
                 throw UnbalancedTransaction::create();
             }
 
-            $transaction = Transaction::create([
+            $transaction = Accounting::getTransactionClass()::create([
                 'number' => $data->number,
                 'date' => $data->date,
                 'description' => $data->description,
@@ -32,6 +33,8 @@ class CreateTransaction
             }
 
             $transaction->lines()->createMany($data->lines->toArray());
+
+            app(PostTransactionToLedger::class)->handle($transaction);
 
             return $transaction;
         });

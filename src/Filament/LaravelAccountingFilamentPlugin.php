@@ -3,7 +3,9 @@
 namespace AsevenTeam\LaravelAccounting\Filament;
 
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
+use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
+use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\TrialBalance;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Contracts\Plugin;
@@ -12,6 +14,8 @@ use Filament\Panel;
 
 class LaravelAccountingFilamentPlugin implements Plugin
 {
+    protected ?string $navigationGroup = null;
+
     public function getId(): string
     {
         return 'laravel-accounting';
@@ -27,6 +31,8 @@ class LaravelAccountingFilamentPlugin implements Plugin
             ->pages([
                 Reports::class,
                 Journal::class,
+                GeneralLedger::class,
+                TrialBalance::class,
             ]);
     }
 
@@ -35,6 +41,18 @@ class LaravelAccountingFilamentPlugin implements Plugin
         Field::configureUsing(function (Field $field) {
             $field->translateLabel();
         });
+    }
+
+    public function navigationGroup(string $navigationGroup): static
+    {
+        $this->navigationGroup = $navigationGroup;
+
+        return $this;
+    }
+
+    public function getNavigationGroup(): ?string
+    {
+        return $this->navigationGroup;
     }
 
     public static function make(): static

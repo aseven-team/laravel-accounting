@@ -27,13 +27,20 @@ use Illuminate\Support\Carbon;
  * @property-read Account $parent
  * @property-read Collection<int, Account> $children
  */
-class Account extends Model
+class Account extends Model implements \AsevenTeam\LaravelAccounting\Contracts\Account
 {
     use HasFactory;
 
     protected $table = 'accounts';
 
     protected $guarded = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->table = config('accounting.table_names.accounts') ?: parent::getTable();
+    }
 
     protected function casts(): array
     {
@@ -58,16 +65,16 @@ class Account extends Model
 
     public function transactionLines(): HasMany
     {
-        return $this->hasMany(TransactionLine::class);
+        return $this->hasMany(config('accounting.models.transaction_line'), 'account_id');
     }
 
     public function parent(): BelongsTo
     {
-        return $this->belongsTo(Account::class, 'parent_id');
+        return $this->belongsTo(static::class, 'parent_id');
     }
 
     public function children(): HasMany
     {
-        return $this->hasMany(Account::class, 'parent_id');
+        return $this->hasMany(static::class, 'parent_id');
     }
 }

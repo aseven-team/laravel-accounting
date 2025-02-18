@@ -33,7 +33,17 @@ class TestCase extends Orchestra
 
         config()->set('data', require __DIR__.'/../vendor/spatie/laravel-data/config/data.php');
 
-        $migration = include __DIR__.'/../database/migrations/create_accounting_tables.php';
-        $migration->up();
+        foreach ($this->migrationFiles() as $file) {
+            $migration = include __DIR__.'/../database/migrations/'.$file;
+            $migration->up();
+        }
+    }
+
+    protected function migrationFiles(): array
+    {
+        return [
+            'create_accounting_tables.php',
+            'create_ledgers_table.php',
+        ];
     }
 }

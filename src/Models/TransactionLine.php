@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Models;
 
+use AsevenTeam\LaravelAccounting\Contracts\TransactionLine as TransactionLineContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read Transaction $transaction
  * @property-read Account $account
  */
-class TransactionLine extends Model
+class TransactionLine extends Model implements TransactionLineContract
 {
     use HasFactory;
 
@@ -24,13 +25,20 @@ class TransactionLine extends Model
 
     protected $guarded = [];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->table = config('accounting.table_names.transaction_lines') ?: parent::getTable();
+    }
+
     public function transaction(): BelongsTo
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsTo(config('accounting.models.transaction'), 'transaction_id');
     }
 
     public function account(): BelongsTo
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(config('accounting.models.account'), 'account_id');
     }
 }

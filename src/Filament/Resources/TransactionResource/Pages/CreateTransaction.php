@@ -23,7 +23,7 @@ class CreateTransaction extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         try {
-            return app(CreateTransactionAction::class)->handle(CreateTransactionData::from([
+            $transaction = app(CreateTransactionAction::class)->handle(CreateTransactionData::from([
                 'date' => Carbon::parse($data['date']),
                 'number' => $data['number'],
                 'description' => $data['description'],
@@ -35,7 +35,9 @@ class CreateTransaction extends CreateRecord
                 ->title(__($exception->getMessage()))
                 ->send();
 
-            $this->halt();
+            throw new Halt;
         }
+
+        return $transaction;
     }
 }

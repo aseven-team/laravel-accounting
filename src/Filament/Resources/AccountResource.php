@@ -4,6 +4,8 @@ namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
+use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use Filament\Forms;
@@ -16,9 +18,19 @@ use Filament\Tables\Table;
 
 class AccountResource extends Resource
 {
-    protected static ?string $model = Account::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?int $navigationSort = 3;
+
+    public static function getModel(): string
+    {
+        return Accounting::getAccountClass();
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
+    }
 
     public static function form(Form $form): Form
     {
@@ -30,17 +42,26 @@ class AccountResource extends Resource
     public static function getFormSchema(): array
     {
         return [
-            Forms\Components\TextInput::make('name')
+            Forms\Components\Select::make('type')
+                ->options(AccountType::class)
+                ->disabledOn('edit')
                 ->required()
-                ->maxLength(255),
+                ->live()
+                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                    $type = AccountType::tryFrom($state);
+
+                    if ($type) {
+                        $set('code', $type->getDefaultCodePrefix().'-');
+                        $set('normal_balance', $type->getDefaultNormalBalance());
+                    }
+                }),
             Forms\Components\TextInput::make('code')
                 ->required()
                 ->maxLength(20)
                 ->unique(Account::class, ignoreRecord: true),
-            Forms\Components\Select::make('type')
-                ->options(AccountType::class)
-                ->disabledOn('edit')
-                ->required(),
+            Forms\Components\TextInput::make('name')
+                ->required()
+                ->maxLength(255),
             Forms\Components\Select::make('normal_balance')
                 ->options(NormalBalance::class)
                 ->disabledOn('edit')
@@ -60,7 +81,8 @@ class AccountResource extends Resource
                     ->columns()
                     ->schema([
                         Infolists\Components\TextEntry::make('code'),
-                        Infolists\Components\TextEntry::make('status'),
+                        Infolists\Components\TextEntry::make('status')
+                            ->badge(),
                         Infolists\Components\TextEntry::make('name'),
                         Infolists\Components\TextEntry::make('type'),
                         Infolists\Components\TextEntry::make('description')
@@ -73,12 +95,14 @@ class AccountResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('code')
             ->columns([
                 Tables\Columns\TextColumn::make('code'),
                 Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('normal_balance'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
             ])
             ->filters([
                 //

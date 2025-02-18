@@ -4,7 +4,9 @@ namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
+use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
+use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
@@ -18,11 +20,21 @@ use Filament\Tables\Table;
 
 class TransactionResource extends Resource
 {
-    protected static ?string $model = Transaction::class;
-
     protected static ?string $slug = 'transactions';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+
+    protected static ?int $navigationSort = 2;
+
+    public static function getModel(): string
+    {
+        return Accounting::getTransactionClass();
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
+    }
 
     public static function form(Form $form): Form
     {
@@ -43,12 +55,12 @@ class TransactionResource extends Resource
                             ->displayFormat('d/m/Y'),
 
                         TableRepeater::make('lines')
-                            ->formatStateUsing(function (?Transaction $transaction, TableRepeater $component) {
-                                if ($transaction->lines->isEmpty()) {
+                            ->formatStateUsing(function (?Transaction $record, TableRepeater $component) {
+                                if (blank($record) || $record->lines->isEmpty()) {
                                     return $component->getDefaultState();
                                 }
 
-                                return $transaction->lines->map(function ($line) {
+                                return $record->lines->map(function ($line) {
                                     return [
                                         'account_id' => $line->account_id,
                                         'description' => $line->description,
@@ -79,8 +91,8 @@ class TransactionResource extends Resource
                             ->schema([
                                 Forms\Components\Select::make('account_id')
                                     ->options(function () {
-                                        return Account::query()
-                                            ->select('id', 'code', 'name')
+                                        return Accounting::getAccountClass()::query()
+                                            ->select(['id', 'code', 'name'])
                                             ->get()
                                             ->mapWithKeys(function (Account $account) {
                                                 return [$account->id => "{$account->code} - {$account->name}"];
@@ -102,11 +114,11 @@ class TransactionResource extends Resource
                                 Forms\Components\TextInput::make('description')
                                     ->maxLength(200),
                                 MoneyInput::make('debit')
-                                    ->placeholder(0)
+                                    ->placeholder('0')
                                     ->dehydrateStateUsing(fn ($state) => $state ?? 0)
                                     ->live(onBlur: true),
                                 MoneyInput::make('credit')
-                                    ->placeholder(0)
+                                    ->placeholder('0')
                                     ->dehydrateStateUsing(fn ($state) => $state ?? 0)
                                     ->live(onBlur: true),
                             ]),
