@@ -44,6 +44,7 @@ class AccountResource extends Resource
         return [
             Forms\Components\Select::make('type')
                 ->options(AccountType::class)
+                ->searchable()
                 ->disabledOn('edit')
                 ->required()
                 ->live()
@@ -66,8 +67,11 @@ class AccountResource extends Resource
                 ->options(NormalBalance::class)
                 ->disabledOn('edit')
                 ->required(),
+            Forms\Components\Select::make('parent_id')
+                ->label(__('Sub account of'))
+                ->options(fn () => Account::query()->pluck('name', 'id'))
+                ->searchable(),
             Forms\Components\Textarea::make('description')
-                ->rows(3)
                 ->nullable()
                 ->maxLength(1000),
         ];
@@ -78,16 +82,20 @@ class AccountResource extends Resource
         return $infolist
             ->schema([
                 Infolists\Components\Section::make()
-                    ->columns()
+                    ->columns(3)
                     ->schema([
                         Infolists\Components\TextEntry::make('code'),
+                        Infolists\Components\TextEntry::make('name'),
                         Infolists\Components\TextEntry::make('status')
                             ->badge(),
-                        Infolists\Components\TextEntry::make('name'),
                         Infolists\Components\TextEntry::make('type'),
+                        Infolists\Components\TextEntry::make('normal_balance'),
+                        Infolists\Components\TextEntry::make('parent')
+                            ->label(__('Sub account of'))
+                            ->placeholder('-')
+                            ->formatStateUsing(fn (?Account $account) => $account ? "($account->code) $account->name" : null),
                         Infolists\Components\TextEntry::make('description')
                             ->placeholder('-'),
-                        Infolists\Components\TextEntry::make('normal_balance'),
                     ]),
             ]);
     }
@@ -97,15 +105,19 @@ class AccountResource extends Resource
         return $table
             ->defaultSort('code')
             ->columns([
-                Tables\Columns\TextColumn::make('code'),
-                Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('code')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('normal_balance'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('type')
+                    ->options(AccountType::class)
+                    ->searchable(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
