@@ -3,6 +3,7 @@
 namespace AsevenTeam\LaravelAccounting;
 
 use AsevenTeam\LaravelAccounting\Commands\SyncLedgerCommand;
+use AsevenTeam\LaravelAccounting\Contracts\ReportService;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -19,5 +20,10 @@ class LaravelAccountingServiceProvider extends PackageServiceProvider
                 'create_accounting_tables',
                 'create_ledgers_table',
             ]);
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(ReportService::class, config('accounting.report_service'));
     }
 }

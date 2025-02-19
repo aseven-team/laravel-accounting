@@ -29,9 +29,13 @@
             @foreach($reports as $journal)
                 <x-accounting::table.group-row>
                     <x-accounting::table.cell colspan="3">
-                        <x-filament::link :href="TransactionResource::getUrl('view', ['record' => $journal->transaction_id])">
+                        @if ($journal->url)
+                        <x-filament::link :href="$journal->url">
                             {{ $journal->transaction_title }}
                         </x-filament::link>
+                        @else
+                            {{ $journal->transaction_title }}
+                        @endif
                         - {{ $journal->transaction_date->format('d/m/Y') }}
                     </x-accounting::table.cell>
                 </x-accounting::table.group-row>
