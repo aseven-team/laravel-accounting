@@ -2,6 +2,19 @@
 
 All notable changes to `LaravelAccounting` will be documented in this file.
 
+## v1.5.0 - 2025-02-19
+
+### What's Changed
+
+* Improve account list by @muhajirrr in https://github.com/aseven-team/laravel-accounting/pull/1
+* Configurable ReportService @muhajirrr in https://github.com/aseven-team/laravel-accounting/pull/1
+
+### New Contributors
+
+* @muhajirrr made their first contribution in https://github.com/aseven-team/laravel-accounting/pull/1
+
+**Full Changelog**: https://github.com/aseven-team/laravel-accounting/compare/v1.4.0...v1.5.0
+
 ## v1.4.0 - 2025-01-28
 
 - Add configurable models and table names
