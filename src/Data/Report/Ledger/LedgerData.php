@@ -11,6 +11,7 @@ class LedgerData extends Data
         public string $transaction_id,
         public string $transaction_title,
         public Carbon $transaction_date,
+        public ?string $url,
         public ?string $description,
         public float $debit,
         public float $credit,

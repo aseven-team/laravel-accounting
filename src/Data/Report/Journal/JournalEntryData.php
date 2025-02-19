@@ -12,6 +12,7 @@ class JournalEntryData extends Data
         public int $transaction_id,
         public string $transaction_title,
         public Carbon $transaction_date,
+        public ?string $url,
         /** @var Collection<int, JournalEntryItemData> $items */
         public Collection $items,
     ) {}

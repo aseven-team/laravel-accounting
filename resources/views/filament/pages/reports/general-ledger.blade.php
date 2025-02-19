@@ -98,9 +98,13 @@
                         </x-accounting::table.cell>
 
                         <x-accounting::table.cell>
-                            <x-filament::link :href="TransactionResource::getUrl('view', ['record' => $ledger->transaction_id])">
+                            @if ($ledger->url)
+                                <x-filament::link :href="TransactionResource::getUrl('view', ['record' => $ledger->transaction_id])">
+                                    {{ $ledger->transaction_title }}
+                                </x-filament::link>
+                            @else
                                 {{ $ledger->transaction_title }}
-                            </x-filament::link>
+                            @endif
                         </x-accounting::table.cell>
 
                         <x-accounting::table.cell>

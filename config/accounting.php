@@ -52,4 +52,10 @@ return [
          */
         'ledgers' => 'ledgers',
     ],
+
+    /**
+     * The service class for the accounting service. You can use your own service class
+     * by implementing `AsevenTeam\LaravelAccounting\Contracts\ReportService` interface.
+     */
+    'report_service' => AsevenTeam\LaravelAccounting\Services\ReportService::class,
 ];

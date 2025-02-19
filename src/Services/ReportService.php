@@ -2,6 +2,7 @@
 
 namespace AsevenTeam\LaravelAccounting\Services;
 
+use AsevenTeam\LaravelAccounting\Contracts\ReportService as ReportServiceInterface;
 use AsevenTeam\LaravelAccounting\Data\Report\Journal\JournalEntryData;
 use AsevenTeam\LaravelAccounting\Data\Report\Ledger\AccountLedgerData;
 use AsevenTeam\LaravelAccounting\Data\Report\TrialBalance\TrialBalanceData;
@@ -12,7 +13,7 @@ use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
-class ReportService
+class ReportService implements ReportServiceInterface
 {
     /**
      * Get journal report
@@ -32,6 +33,7 @@ class ReportService
                 'transaction_id' => $transaction->id,
                 'transaction_title' => $transaction->title,
                 'transaction_date' => $transaction->date,
+                'url' => $this->getTransactionUrl($transaction->id),
                 'items' => $transaction->lines->map(fn ($line) => [
                     'account_code' => $line->account->code,
                     'account_name' => $line->account->name,
@@ -84,6 +86,7 @@ class ReportService
                     'transaction_id' => $ledger->transaction_id,
                     'transaction_title' => $ledger->transaction_title,
                     'transaction_date' => $ledger->date,
+                    'url' => $this->getTransactionUrl($ledger->transaction_id),
                     'description' => $ledger->description,
                     'debit' => $ledger->debit,
                     'credit' => $ledger->credit,
@@ -151,5 +154,10 @@ class ReportService
             'total_ending_debit_balance' => $accountTypes->sum(fn ($type) => $type['account_balances']->sum('ending_debit_balance')),
             'total_ending_credit_balance' => $accountTypes->sum(fn ($type) => $type['account_balances']->sum('ending_credit_balance')),
         ]);
+    }
+
+    protected function getTransactionUrl(int $transactionId): ?string
+    {
+        return null;
     }
 }
