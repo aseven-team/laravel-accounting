@@ -7,6 +7,7 @@ use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\TrialBalance;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
+use AsevenTeam\LaravelAccounting\Filament\Resources\StartingBalanceResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Contracts\Plugin;
 use Filament\Forms\Components\Field;
@@ -27,6 +28,7 @@ class LaravelAccountingFilamentPlugin implements Plugin
             ->resources([
                 AccountResource::class,
                 TransactionResource::class,
+                StartingBalanceResource::class,
             ])
             ->pages([
                 Reports::class,
@@ -38,9 +40,7 @@ class LaravelAccountingFilamentPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        Field::configureUsing(function (Field $field) {
-            $field->translateLabel();
-        });
+
     }
 
     public function navigationGroup(string $navigationGroup): static

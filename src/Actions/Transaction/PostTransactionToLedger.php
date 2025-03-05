@@ -15,6 +15,7 @@ class PostTransactionToLedger
             $transaction->load([
                 'lines:id,transaction_id,account_id,debit,credit,description',
                 'lines.account:id,normal_balance',
+                'lines.account.startingBalance:id,account_id,debit,credit',
             ]);
 
             foreach ($transaction->lines as $line) {
@@ -23,9 +24,17 @@ class PostTransactionToLedger
                     ->latest('id')
                     ->first();
 
+                $startingDebitBalance = $latestLedger
+                    ? $latestLedger->debit_balance
+                    : $line->account->startingBalance?->debit;
+
+                $startingCreditBalance = $latestLedger
+                    ? $latestLedger->credit_balance
+                    : $line->account->startingBalance?->credit;
+
                 $balance = match ($line->account->normal_balance) {
-                    NormalBalance::Debit => $latestLedger?->debit_balance - $latestLedger?->credit_balance,
-                    NormalBalance::Credit => $latestLedger?->credit_balance - $latestLedger?->debit_balance,
+                    NormalBalance::Debit => $startingDebitBalance - $startingCreditBalance,
+                    NormalBalance::Credit => $startingCreditBalance - $startingDebitBalance,
                 };
 
                 $addition = match ($line->account->normal_balance) {

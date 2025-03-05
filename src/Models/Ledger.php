@@ -2,7 +2,6 @@
 
 namespace AsevenTeam\LaravelAccounting\Models;
 
-use AsevenTeam\LaravelAccounting\Contracts\Ledger as LedgerContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,7 +25,7 @@ use Illuminate\Support\Carbon;
  * @property-read Transaction $transaction
  * @property-read TransactionLine $transactionLine
  */
-class Ledger extends Model implements LedgerContract
+class Ledger extends Model
 {
     use HasFactory;
 

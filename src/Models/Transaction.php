@@ -4,7 +4,6 @@ namespace AsevenTeam\LaravelAccounting\Models;
 
 use AsevenTeam\LaravelAccounting\Concerns\AutoSetNumber;
 use AsevenTeam\LaravelAccounting\Contracts\HasNumber;
-use AsevenTeam\LaravelAccounting\Contracts\Transaction as TransactionContract;
 use AsevenTeam\LaravelAccounting\QueryBuilders\TransactionQueryBuilder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,7 +27,7 @@ use Illuminate\Support\Carbon;
  * @property-read Model $reference
  * @property-read Collection<int, TransactionLine> $lines
  */
-class Transaction extends Model implements HasNumber, TransactionContract
+class Transaction extends Model implements HasNumber
 {
     use AutoSetNumber;
     use HasFactory;

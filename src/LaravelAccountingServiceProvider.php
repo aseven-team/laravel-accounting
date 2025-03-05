@@ -19,6 +19,7 @@ class LaravelAccountingServiceProvider extends PackageServiceProvider
             ->hasMigrations([
                 'create_accounting_tables',
                 'create_ledgers_table',
+                'create_starting_balances_table',
             ]);
     }
 

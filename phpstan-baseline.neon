@@ -1,0 +1,13 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Anonymous function should return array\{account_code\: string, account_name\: string, starting_debit_balance\: mixed, starting_credit_balance\: mixed, ending_debit_balance\: float, ending_credit_balance\: float, ledgers\: Illuminate\\Support\\Collection\<int, array\{transaction_id\: int, transaction_title\: string, transaction_date\: Illuminate\\Support\\Carbon, url\: string\|null, description\: string\|null, debit\: float, credit\: float, debit_balance\: float, \.\.\.\}\>\} but returns array\{account_code\: string, account_name\: string, starting_debit_balance\: mixed, starting_credit_balance\: mixed, ending_debit_balance\: float, ending_credit_balance\: float, ledgers\: Illuminate\\Support\\Collection\<int, array\{transaction_id\: int, transaction_title\: string, transaction_date\: Illuminate\\Support\\Carbon, url\: string\|null, description\: string\|null, debit\: float, credit\: float, debit_balance\: float, \.\.\.\}\>\}\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Services/ReportService.php
+
+		-
+			message: '#^Parameter \#1 \$callback of method Illuminate\\Database\\Eloquent\\Collection\<\(int\|string\),Illuminate\\Database\\Eloquent\\Collection\<int, AsevenTeam\\LaravelAccounting\\Models\\Ledger\>\>\:\:map\(\) expects callable\(Illuminate\\Database\\Eloquent\\Collection\<int, AsevenTeam\\LaravelAccounting\\Models\\Ledger\>, int\|string\)\: array\{account_code\: string, account_name\: string, starting_debit_balance\: mixed, starting_credit_balance\: mixed, ending_debit_balance\: float, ending_credit_balance\: float, ledgers\: Illuminate\\Support\\Collection\<int, array\{transaction_id\: int, transaction_title\: string, transaction_date\: Illuminate\\Support\\Carbon, url\: string\|null, description\: string\|null, debit\: float, credit\: float, debit_balance\: float, credit_balance\: float\}\>\}, Closure\(Illuminate\\Support\\Collection\)\: array\{account_code\: string, account_name\: string, starting_debit_balance\: mixed, starting_credit_balance\: mixed, ending_debit_balance\: float, ending_credit_balance\: float, ledgers\: Illuminate\\Support\\Collection\<int, array\{transaction_id\: int, transaction_title\: string, transaction_date\: Illuminate\\Support\\Carbon, url\: string\|null, description\: string\|null, debit\: float, credit\: float, debit_balance\: float, credit_balance\: float\}\>\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Services/ReportService.php

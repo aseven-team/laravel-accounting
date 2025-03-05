@@ -25,6 +25,12 @@ return [
          * by extending `AsevenTeam\LaravelAccounting\Models\Ledger` class.
          */
         'ledger' => AsevenTeam\LaravelAccounting\Models\Ledger::class,
+
+        /**
+         * The model class for the accounting starting balance. You can use your own model class
+         * by extending `AsevenTeam\LaravelAccounting\Models\StartingBalance` class.
+         */
+        'starting_balance' => AsevenTeam\LaravelAccounting\Models\StartingBalance::class,
     ],
 
     'table_names' => [
@@ -51,6 +57,12 @@ return [
          * you can change it to any table name you like.
          */
         'ledgers' => 'ledgers',
+
+        /**
+         * The table name for the starting balances table. We provide a default value for this but
+         * you can change it to any table name you like.
+         */
+        'starting_balances' => 'starting_balances',
     ],
 
     /**
