@@ -44,6 +44,7 @@ class TestCase extends Orchestra
         return [
             'create_accounting_tables.php',
             'create_ledgers_table.php',
+            'create_starting_balances_table.php',
         ];
     }
 }

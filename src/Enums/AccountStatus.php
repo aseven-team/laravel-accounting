@@ -10,7 +10,7 @@ enum AccountStatus: string implements HasColor, HasLabel
     case Active = 'active';
     case Archived = 'archived';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Active => __('Active'),
@@ -18,7 +18,7 @@ enum AccountStatus: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::Active => 'success',

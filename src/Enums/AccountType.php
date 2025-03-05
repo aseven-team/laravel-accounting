@@ -12,7 +12,7 @@ enum AccountType: string implements HasLabel
     case Revenue = 'revenue';
     case Expense = 'expense';
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return match ($this) {
             self::Asset => __('Asset'),

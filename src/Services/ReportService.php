@@ -52,20 +52,7 @@ class ReportService implements ReportServiceInterface
      */
     public function getGeneralLedgerReport(?string $from, ?string $to): Collection
     {
-        $startingBalances = Accounting::getLedgerClass()::query()
-            ->joinSub(
-                Accounting::getLedgerClass()::query()
-                    ->selectRaw('max(id) as max_id')
-                    ->where('date', '<', Carbon::parse($from)->startOfDay())
-                    ->groupBy('account_id'),
-                'starting_balances',
-                config('accounting.table_names.ledgers').'.id',
-                '=',
-                'starting_balances.max_id'
-            )
-            ->select('id', 'account_id', 'debit_balance', 'credit_balance')
-            ->get()
-            ->keyBy('account_id');
+        $startingBalances = $this->getStartingBalances($from);
 
         $ledgers = Accounting::getLedgerClass()::query()
             ->with('account:id,code,name')
@@ -78,8 +65,8 @@ class ReportService implements ReportServiceInterface
             ->map(fn (Collection $ledgers) => [
                 'account_code' => $ledgers->first()->account->code,
                 'account_name' => $ledgers->first()->account->name,
-                'starting_debit_balance' => $startingBalances->get($ledgers->first()->account_id)?->debit_balance ?? 0,
-                'starting_credit_balance' => $startingBalances->get($ledgers->first()->account_id)?->credit_balance ?? 0,
+                'starting_debit_balance' => $startingBalances->get($ledgers->first()->account_id)['debit_balance'] ?? 0,
+                'starting_credit_balance' => $startingBalances->get($ledgers->first()->account_id)['credit_balance'] ?? 0,
                 'ending_debit_balance' => $ledgers->last()->debit_balance,
                 'ending_credit_balance' => $ledgers->last()->credit_balance,
                 'ledgers' => $ledgers->map(fn (Ledger $ledger) => [
@@ -105,20 +92,7 @@ class ReportService implements ReportServiceInterface
      */
     public function getTrialBalanceReport(?string $from, ?string $to): TrialBalanceData
     {
-        $startingBalances = Accounting::getLedgerClass()::query()
-            ->joinSub(
-                Accounting::getLedgerClass()::query()
-                    ->selectRaw('max(id) as max_id')
-                    ->where('date', '<', Carbon::parse($from)->startOfDay())
-                    ->groupBy('account_id'),
-                'starting_balances',
-                config('accounting.table_names.ledgers').'.id',
-                '=',
-                'starting_balances.max_id'
-            )
-            ->select('id', 'account_id', 'debit_balance', 'credit_balance')
-            ->get()
-            ->keyBy('account_id');
+        $startingBalances = $this->getStartingBalances($from);
 
         $accountTypes = Accounting::getLedgerClass()::query()
             ->with('account:id,code,name,type')
@@ -135,8 +109,8 @@ class ReportService implements ReportServiceInterface
                         ->map(fn (Collection $ledgers) => [
                             'account_code' => $ledgers->first()->account->code,
                             'account_name' => $ledgers->first()->account->name,
-                            'starting_debit_balance' => $startingBalances->get($ledgers->first()->account_id)?->debit_balance ?? 0,
-                            'starting_credit_balance' => $startingBalances->get($ledgers->first()->account_id)?->credit_balance ?? 0,
+                            'starting_debit_balance' => $startingBalances->get($ledgers->first()->account_id)['debit_balance'] ?? 0,
+                            'starting_credit_balance' => $startingBalances->get($ledgers->first()->account_id)['credit_balance'] ?? 0,
                             'debit_movement' => $ledgers->sum('debit'),
                             'credit_movement' => $ledgers->sum('credit'),
                             'ending_debit_balance' => $ledgers->last()->debit_balance,
@@ -154,6 +128,43 @@ class ReportService implements ReportServiceInterface
             'total_ending_debit_balance' => $accountTypes->sum(fn ($type) => $type['account_balances']->sum('ending_debit_balance')),
             'total_ending_credit_balance' => $accountTypes->sum(fn ($type) => $type['account_balances']->sum('ending_credit_balance')),
         ]);
+    }
+
+    protected function getStartingBalances(?string $date): Collection
+    {
+        $latestLedgers = Accounting::getLedgerClass()::query()
+            ->joinSub(
+                Accounting::getLedgerClass()::query()
+                    ->selectRaw('max(id) as max_id')
+                    ->where('date', '<', Carbon::parse($date)->startOfDay())
+                    ->groupBy('account_id'),
+                'starting_balances',
+                config('accounting.table_names.ledgers').'.id',
+                '=',
+                'starting_balances.max_id'
+            )
+            ->select('id', 'account_id', 'debit_balance', 'credit_balance')
+            ->get();
+
+        $startingBalances = Accounting::getStartingBalanceClass()::query()
+            ->select('id', 'account_id', 'debit', 'credit')
+            ->get()
+            ->mapWithKeys(fn ($balance) => [$balance->account_id => [
+                'account_id' => $balance->account_id,
+                'debit_balance' => $balance->debit,
+                'credit_balance' => $balance->credit,
+            ]])
+            ->toArray();
+
+        $latestLedgers->each(function (Ledger $ledger) use (&$startingBalances) {
+            $startingBalances[$ledger->account_id] = [
+                'account_id' => $ledger->account_id,
+                'debit_balance' => $ledger->debit_balance,
+                'credit_balance' => $ledger->credit_balance,
+            ];
+        });
+
+        return collect($startingBalances);
     }
 
     protected function getTransactionUrl(int $transactionId): ?string

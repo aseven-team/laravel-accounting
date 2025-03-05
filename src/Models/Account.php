@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 /**
@@ -26,8 +27,10 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property-read Account $parent
  * @property-read Collection<int, Account> $children
+ * @property-read Collection<int, TransactionLine> $transactionLines
+ * @property-read ?StartingBalance $startingBalance
  */
-class Account extends Model implements \AsevenTeam\LaravelAccounting\Contracts\Account
+class Account extends Model
 {
     use HasFactory;
 
@@ -76,5 +79,10 @@ class Account extends Model implements \AsevenTeam\LaravelAccounting\Contracts\A
     public function children(): HasMany
     {
         return $this->hasMany(static::class, 'parent_id');
+    }
+
+    public function startingBalance(): HasOne
+    {
+        return $this->hasOne(StartingBalance::class, 'account_id');
     }
 }
