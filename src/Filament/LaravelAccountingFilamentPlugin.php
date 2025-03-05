@@ -10,7 +10,6 @@ use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\StartingBalanceResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Contracts\Plugin;
-use Filament\Forms\Components\Field;
 use Filament\Panel;
 
 class LaravelAccountingFilamentPlugin implements Plugin
@@ -38,10 +37,7 @@ class LaravelAccountingFilamentPlugin implements Plugin
             ]);
     }
 
-    public function boot(Panel $panel): void
-    {
-
-    }
+    public function boot(Panel $panel): void {}
 
     public function navigationGroup(string $navigationGroup): static
     {
