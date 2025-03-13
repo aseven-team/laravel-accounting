@@ -26,11 +26,9 @@ class CreateTransaction
                 'number' => $data->number,
                 'date' => $data->date,
                 'description' => $data->description,
+                'reference_type' => $data->reference?->getMorphClass(),
+                'reference_id' => $data->reference?->getKey(),
             ]);
-
-            if ($data->reference) {
-                $transaction->reference()->associate($data->reference);
-            }
 
             $transaction->lines()->createMany($data->lines->toArray());
 
