@@ -16,11 +16,14 @@ class PendingTransaction
     protected ?Transaction $transaction = null;
 
     protected Collection $lines;
+    
+    protected Collection $accountCache;
 
     public function __construct(?Transaction $transaction = null)
     {
         $this->transaction = $transaction;
         $this->lines = collect();
+        $this->accountCache = collect();
     }
 
     public function setNumber(string $number): static
@@ -54,7 +57,7 @@ class PendingTransaction
     public function addLine(Account|string $account, float $debit, float $credit, ?string $description = null): self
     {
         if (is_string($account)) {
-            $account = Account::findByCode($account); // todo: prevent multiple queries
+            $account = $this->getAccount($account);
         }
 
         $this->lines->push([
@@ -89,6 +92,14 @@ class PendingTransaction
         $this->lines = collect();
 
         return $transaction;
+    }
+    
+    protected function getAccount(string $code): Account
+    {
+        return $this->accountCache->get($code) ?? tap(
+            Account::findByCode($code),
+            fn(Account $account) => $this->accountCache->put($code, $account)
+        );
     }
 
     protected function ensureTransactionIsBalanced(): void
