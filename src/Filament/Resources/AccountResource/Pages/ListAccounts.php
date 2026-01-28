@@ -2,13 +2,12 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 
-use Filament\Actions\Action;
-use Filament\Actions\CreateAction;
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Filament\Resources\StartingBalanceResource;
-use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListAccounts extends ListRecords

@@ -2,37 +2,37 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
-use Filament\Forms\Components\Repeater;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Filament\Schemas\Components\Utilities\Get;
-use Filament\Forms\Components\Select;
-use Filament\Actions\Action;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\ViewField;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\ViewAction;
-use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ListTransactions;
-use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\CreateTransaction;
-use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ViewTransaction;
-use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\EditTransaction;
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
 use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\CreateTransaction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\EditTransaction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ListTransactions;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ViewTransaction;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
+use Filament\Actions\Action;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class TransactionResource extends Resource
 {
     protected static ?string $slug = 'transactions';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?int $navigationSort = 2;
 

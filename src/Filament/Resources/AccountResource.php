@@ -2,33 +2,29 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
-use Filament\Schemas\Schema;
-use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
-use Filament\Actions\ViewAction;
-use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ListAccounts;
-use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ViewAccount;
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
 use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
-use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
+use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ListAccounts;
+use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ViewAccount;
 use AsevenTeam\LaravelAccounting\Models\Account;
-use Filament\Forms;
-use Filament\Infolists;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class AccountResource extends Resource
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?int $navigationSort = 3;
 

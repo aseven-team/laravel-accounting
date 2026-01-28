@@ -10,7 +10,7 @@ use Filament\Pages\Page;
 
 class Reports extends Page
 {
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-chart-bar';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-document-chart-bar';
 
     protected string $view = 'accounting::filament.pages.reports';
 

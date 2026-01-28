@@ -2,9 +2,8 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 
-use Filament\Actions\EditAction;
 use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
-use Filament\Actions;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewTransaction extends ViewRecord

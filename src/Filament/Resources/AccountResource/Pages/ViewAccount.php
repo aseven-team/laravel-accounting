@@ -2,10 +2,6 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 
-use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
-use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
 use AsevenTeam\LaravelAccounting\Actions\Account\DeleteAccount;
 use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsActive;
 use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsArchived;
@@ -13,7 +9,10 @@ use AsevenTeam\LaravelAccounting\Enums\AccountStatus;
 use AsevenTeam\LaravelAccounting\Exceptions\AccountHasTransactionsException;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
 use AsevenTeam\LaravelAccounting\Models\Account;
-use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewAccount extends ViewRecord
