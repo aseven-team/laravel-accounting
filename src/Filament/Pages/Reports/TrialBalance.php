@@ -9,7 +9,7 @@ use Livewire\Attributes\Computed;
 
 class TrialBalance extends BaseReport
 {
-    protected static string $view = 'accounting::filament.pages.reports.trial-balance';
+    protected string $view = 'accounting::filament.pages.reports.trial-balance';
 
     protected function clearCachedReport(): void
     {

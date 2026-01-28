@@ -9,7 +9,7 @@ use Livewire\Attributes\Computed;
 
 class GeneralLedger extends BaseReport
 {
-    protected static string $view = 'accounting::filament.pages.reports.general-ledger';
+    protected string $view = 'accounting::filament.pages.reports.general-ledger';
 
     public function clearCachedReport(): void
     {

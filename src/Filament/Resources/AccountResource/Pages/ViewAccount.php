@@ -2,6 +2,10 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 
+use Filament\Actions\ActionGroup;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
 use AsevenTeam\LaravelAccounting\Actions\Account\DeleteAccount;
 use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsActive;
 use AsevenTeam\LaravelAccounting\Actions\Account\MarkAccountAsArchived;
@@ -19,38 +23,38 @@ class ViewAccount extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ActionGroup::make([
-                Actions\EditAction::make()
+            ActionGroup::make([
+                EditAction::make()
                     ->modalWidth('lg'),
 
-                Actions\Action::make('archive')
+                Action::make('archive')
                     ->label(__('Archive'))
                     ->icon('heroicon-o-archive-box-arrow-down')
                     ->modalHeading(__('Archive Account'))
                     ->requiresConfirmation()
                     ->successNotificationTitle(__('Account archived'))
                     ->visible(fn (Account $record) => $record->status === AccountStatus::Active)
-                    ->action(function (Actions\Action $action, Account $record) {
+                    ->action(function (Action $action, Account $record) {
                         app(MarkAccountAsArchived::class)->handle($record);
 
                         $action->success();
                     }),
 
-                Actions\Action::make('reactivate')
+                Action::make('reactivate')
                     ->label(__('Reactivate'))
                     ->icon('heroicon-o-check-circle')
                     ->modalHeading(__('Reactivate Account'))
                     ->requiresConfirmation()
                     ->successNotificationTitle(__('Account reactivated'))
                     ->visible(fn (Account $record) => $record->status === AccountStatus::Archived)
-                    ->action(function (Actions\Action $action, Account $record) {
+                    ->action(function (Action $action, Account $record) {
                         app(MarkAccountAsActive::class)->handle($record);
 
                         $action->success();
                     }),
 
-                Actions\DeleteAction::make()
-                    ->using(function (Actions\DeleteAction $action, Account $record): bool {
+                DeleteAction::make()
+                    ->using(function (DeleteAction $action, Account $record): bool {
                         try {
                             app(DeleteAccount::class)->handle($record);
                         } catch (AccountHasTransactionsException $e) {

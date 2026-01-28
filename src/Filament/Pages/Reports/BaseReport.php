@@ -2,10 +2,12 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 
+use Filament\Panel;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\DatePicker;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Concerns\HasFilters;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 
 abstract class BaseReport extends Page
@@ -18,7 +20,7 @@ abstract class BaseReport extends Page
 
     abstract protected function clearCachedReport(): void;
 
-    public static function getSlug(): string
+    public static function getSlug(?Panel $panel = null): string
     {
         return Reports::getSlug().'/'.parent::getSlug();
     }
@@ -31,17 +33,17 @@ abstract class BaseReport extends Page
         ];
     }
 
-    protected function filtersForm(Form $form): Form
+    protected function filtersForm(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns()
             ->schema([
-                Forms\Components\DatePicker::make('start_date')
+                DatePicker::make('start_date')
                     ->native(false)
                     ->format('Y-m-d')
                     ->displayFormat('d/m/Y'),
 
-                Forms\Components\DatePicker::make('end_date')
+                DatePicker::make('end_date')
                     ->native(false)
                     ->format('Y-m-d')
                     ->displayFormat('d/m/Y'),

@@ -2,19 +2,18 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\StartingBalanceResource\Pages;
 
+use Filament\Forms\Components\Repeater;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
 use AsevenTeam\LaravelAccounting\Filament\Resources\StartingBalanceResource;
 use AsevenTeam\LaravelAccounting\Models\Account;
-use Awcodes\TableRepeater\Components\TableRepeater;
-use Awcodes\TableRepeater\Header;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Facades\FilamentView;
@@ -22,7 +21,7 @@ use Illuminate\Support\Js;
 use JsonException;
 
 /**
- * @property Form $form
+ * @property Schema $form
  */
 class EditStartingBalances extends Page
 {
@@ -37,7 +36,7 @@ class EditStartingBalances extends Page
 
     protected static string $resource = StartingBalanceResource::class;
 
-    protected static string $view = 'accounting::filament.resources.starting-balance-resource.pages.edit-starting-balances';
+    protected string $view = 'accounting::filament.resources.starting-balance-resource.pages.edit-starting-balances';
 
     public function mount(): void
     {
@@ -93,29 +92,29 @@ class EditStartingBalances extends Page
         $this->redirect(StartingBalanceResource::getUrl(), FilamentView::hasSpaMode());
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Section::make()
                     ->schema([
-                        TableRepeater::make('starting_balances')
+                        Repeater::make('starting_balances')
                             ->hiddenLabel()
                             ->addable(false)
                             ->reorderable(false)
                             ->deletable(false)
-                            ->headers([
-                                Header::make(__('Account')),
-                                Header::make(__('Debit'))->width('240px'),
-                                Header::make(__('Credit'))->width('240px'),
+                            ->table([
+                                Repeater\TableColumn::make(__('Account')),
+                                Repeater\TableColumn::make(__('Debit'))->width('240px'),
+                                Repeater\TableColumn::make(__('Credit'))->width('240px'),
                             ])
                             ->schema([
                                 Hidden::make('account_id'),
                                 Hidden::make('account')
                                     ->dehydrated(false),
-                                Placeholder::make('account')
+                                TextEntry::make('account')
                                     ->hiddenLabel()
-                                    ->content(fn (Get $get) => $get('account')),
+                                    ->state(fn (Get $get) => $get('account')),
                                 MoneyInput::make('debit'),
                                 MoneyInput::make('credit'),
                             ]),
@@ -142,13 +141,13 @@ class EditStartingBalances extends Page
     }
 
     /**
-     * @return array<int | string, string | Form>
+     * @return array<int|string, string|Schema>
      */
     protected function getForms(): array
     {
         return [
             'form' => $this->form(
-                $this->makeForm()
+                Schema::make()
                     ->statePath('data'),
             ),
         ];

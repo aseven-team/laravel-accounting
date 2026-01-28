@@ -2,6 +2,18 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Actions\ViewAction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ListAccounts;
+use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages\ViewAccount;
 use AsevenTeam\LaravelAccounting\Enums\AccountType;
 use AsevenTeam\LaravelAccounting\Enums\NormalBalance;
 use AsevenTeam\LaravelAccounting\Facades\Accounting;
@@ -9,16 +21,14 @@ use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Infolists;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
 class AccountResource extends Resource
 {
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?int $navigationSort = 3;
 
@@ -32,9 +42,9 @@ class AccountResource extends Resource
         return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(1)
             ->schema(self::getFormSchema());
     }
@@ -42,13 +52,13 @@ class AccountResource extends Resource
     public static function getFormSchema(): array
     {
         return [
-            Forms\Components\Select::make('type')
+            Select::make('type')
                 ->options(AccountType::class)
                 ->searchable()
                 ->disabledOn('edit')
                 ->required()
                 ->live()
-                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $type = AccountType::tryFrom($state);
 
                     if ($type) {
@@ -56,45 +66,45 @@ class AccountResource extends Resource
                         $set('normal_balance', $type->getDefaultNormalBalance());
                     }
                 }),
-            Forms\Components\TextInput::make('code')
+            TextInput::make('code')
                 ->required()
                 ->maxLength(20)
                 ->unique(Account::class, ignoreRecord: true),
-            Forms\Components\TextInput::make('name')
+            TextInput::make('name')
                 ->required()
                 ->maxLength(255),
-            Forms\Components\Select::make('normal_balance')
+            Select::make('normal_balance')
                 ->options(NormalBalance::class)
                 ->disabledOn('edit')
                 ->required(),
-            Forms\Components\Select::make('parent_id')
+            Select::make('parent_id')
                 ->label(__('Sub account of'))
                 ->options(fn () => Account::query()->pluck('name', 'id'))
                 ->searchable(),
-            Forms\Components\Textarea::make('description')
+            Textarea::make('description')
                 ->nullable()
                 ->maxLength(1000),
         ];
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $schema): Schema
     {
-        return $infolist
-            ->schema([
-                Infolists\Components\Section::make()
+        return $schema
+            ->components([
+                Section::make()
                     ->columns(3)
                     ->schema([
-                        Infolists\Components\TextEntry::make('code'),
-                        Infolists\Components\TextEntry::make('name'),
-                        Infolists\Components\TextEntry::make('status')
+                        TextEntry::make('code'),
+                        TextEntry::make('name'),
+                        TextEntry::make('status')
                             ->badge(),
-                        Infolists\Components\TextEntry::make('type'),
-                        Infolists\Components\TextEntry::make('normal_balance'),
-                        Infolists\Components\TextEntry::make('parent')
+                        TextEntry::make('type'),
+                        TextEntry::make('normal_balance'),
+                        TextEntry::make('parent')
                             ->label(__('Sub account of'))
                             ->placeholder('-')
                             ->formatStateUsing(fn (?Account $account) => $account ? "($account->code) $account->name" : null),
-                        Infolists\Components\TextEntry::make('description')
+                        TextEntry::make('description')
                             ->placeholder('-'),
                     ]),
             ]);
@@ -105,22 +115,22 @@ class AccountResource extends Resource
         return $table
             ->defaultSort('code')
             ->columns([
-                Tables\Columns\TextColumn::make('code')
+                TextColumn::make('code')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('normal_balance'),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('type'),
+                TextColumn::make('normal_balance'),
+                TextColumn::make('status')
                     ->badge(),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('type')
+                SelectFilter::make('type')
                     ->options(AccountType::class)
                     ->searchable(),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ]);
     }
 
@@ -134,8 +144,8 @@ class AccountResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAccounts::route('/'),
-            'view' => Pages\ViewAccount::route('/{record}'),
+            'index' => ListAccounts::route('/'),
+            'view' => ViewAccount::route('/{record}'),
         ];
     }
 }

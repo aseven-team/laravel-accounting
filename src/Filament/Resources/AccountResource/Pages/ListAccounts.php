@@ -2,6 +2,8 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\CreateAction;
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Filament\Resources\AccountResource;
@@ -16,12 +18,12 @@ class ListAccounts extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('starting_balance')
+            Action::make('starting_balance')
                 ->label(__('Starting Balance'))
                 ->color('gray')
                 ->url(StartingBalanceResource::getUrl()),
 
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->modalWidth('lg')
                 ->using(function (array $data) {
                     return app(CreateAccount::class)->handle(CreateAccountData::from($data));

@@ -9,7 +9,7 @@ use Livewire\Attributes\Computed;
 
 class Journal extends BaseReport
 {
-    protected static string $view = 'accounting::filament.pages.reports.journal';
+    protected string $view = 'accounting::filament.pages.reports.journal';
 
     protected function clearCachedReport(): void
     {

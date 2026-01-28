@@ -2,27 +2,37 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Resources;
 
+use Filament\Forms\Components\Repeater;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\Select;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\ViewField;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\ViewAction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ListTransactions;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\CreateTransaction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\ViewTransaction;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages\EditTransaction;
 use AsevenTeam\LaravelAccounting\Actions\Account\CreateAccount;
 use AsevenTeam\LaravelAccounting\Data\Account\CreateAccountData;
 use AsevenTeam\LaravelAccounting\Facades\Accounting;
 use AsevenTeam\LaravelAccounting\Filament\Components\Forms\MoneyInput;
 use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
-use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource\Pages;
 use AsevenTeam\LaravelAccounting\Models\Account;
 use AsevenTeam\LaravelAccounting\Models\Transaction;
-use Awcodes\TableRepeater\Components\TableRepeater;
-use Awcodes\TableRepeater\Header;
-use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
 
 class TransactionResource extends Resource
 {
     protected static ?string $slug = 'transactions';
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
 
     protected static ?int $navigationSort = 2;
 
@@ -36,60 +46,54 @@ class TransactionResource extends Resource
         return LaravelAccountingFilamentPlugin::get()->getNavigationGroup();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make()
+        return $schema
+            ->components([
+                Section::make()
                     ->columns()
                     ->schema([
-                        Forms\Components\TextInput::make('number')
+                        TextInput::make('number')
                             ->nullable()
                             ->placeholder('[Auto]')
                             ->maxLength(20),
 
-                        Forms\Components\DatePicker::make('date')
+                        DatePicker::make('date')
                             ->required()
                             ->default(now())
                             ->native(false)
                             ->displayFormat('d/m/Y'),
 
-                        TableRepeater::make('lines')
-                            ->formatStateUsing(function (?Transaction $record, TableRepeater $component) {
-                                if (blank($record) || $record->lines->isEmpty()) {
-                                    return $component->getDefaultState();
+                        Repeater::make('lines')
+                            ->afterStateHydrated(function (?Transaction $record, Repeater $component) {
+                                if ($record && $record->lines->isNotEmpty()) {
+                                    $component->state($record->lines->map(function ($line) {
+                                        return [
+                                            'account_id' => $line->account_id,
+                                            'description' => $line->description,
+                                            'debit' => $line->debit,
+                                            'credit' => $line->credit,
+                                        ];
+                                    })->toArray());
                                 }
-
-                                return $record->lines->map(function ($line) {
-                                    return [
-                                        'account_id' => $line->account_id,
-                                        'description' => $line->description,
-                                        'debit' => $line->debit,
-                                        'credit' => $line->credit,
-                                    ];
-                                })->toArray();
                             })
                             ->hiddenLabel()
                             ->columnSpanFull()
                             ->defaultItems(2)
-                            ->deletable(fn (Forms\Get $get) => count($get('lines')) > 2)
+                            ->deletable(fn (Get $get) => count($get('lines')) > 2)
                             ->reorderable(false)
-                            ->headers([
-                                Header::make('account')
-                                    ->label(__('Account'))
+                            ->table([
+                                Repeater\TableColumn::make(__('Account'))
                                     ->width('40%'),
-                                Header::make('description')
-                                    ->label(__('Description'))
+                                Repeater\TableColumn::make(__('Description'))
                                     ->width('20%'),
-                                Header::make('debit')
-                                    ->label(__('Debit'))
+                                Repeater\TableColumn::make(__('Debit'))
                                     ->width('20%'),
-                                Header::make('credit')
-                                    ->label(__('Credit'))
+                                Repeater\TableColumn::make(__('Credit'))
                                     ->width('20%'),
                             ])
                             ->schema([
-                                Forms\Components\Select::make('account_id')
+                                Select::make('account_id')
                                     ->options(function () {
                                         return Accounting::getAccountClass()::query()
                                             ->select(['id', 'code', 'name'])
@@ -106,12 +110,12 @@ class TransactionResource extends Resource
 
                                         return $account->id;
                                     })
-                                    ->createOptionAction(function (Forms\Components\Actions\Action $action) {
+                                    ->createOptionAction(function (Action $action) {
                                         return $action
                                             ->modalWidth('lg')
                                             ->modalHeading(__('Create Account'));
                                     }),
-                                Forms\Components\TextInput::make('description')
+                                TextInput::make('description')
                                     ->maxLength(200),
                                 MoneyInput::make('debit')
                                     ->placeholder('0')
@@ -123,12 +127,12 @@ class TransactionResource extends Resource
                                     ->live(onBlur: true),
                             ]),
 
-                        Forms\Components\Textarea::make('description')
+                        Textarea::make('description')
                             ->nullable()
                             ->rows(3)
                             ->maxLength(1000),
 
-                        Forms\Components\ViewField::make('total_debit_credit')
+                        ViewField::make('total_debit_credit')
                             ->view('accounting::filament.components.total-debit-credit'),
                     ]),
             ]);
@@ -139,28 +143,28 @@ class TransactionResource extends Resource
         return $table
             ->defaultSort('date', 'desc')
             ->columns([
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->date('d/m/Y'),
-                Tables\Columns\TextColumn::make('number')
+                TextColumn::make('number')
                     ->prefix('#'),
-                Tables\Columns\TextColumn::make('description')
+                TextColumn::make('description')
                     ->wrap(),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ]);
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTransactions::route('/'),
-            'create' => Pages\CreateTransaction::route('/create'),
-            'view' => Pages\ViewTransaction::route('/{record}'),
-            'edit' => Pages\EditTransaction::route('/{record}/edit'),
+            'index' => ListTransactions::route('/'),
+            'create' => CreateTransaction::route('/create'),
+            'view' => ViewTransaction::route('/{record}'),
+            'edit' => EditTransaction::route('/{record}/edit'),
         ];
     }
 

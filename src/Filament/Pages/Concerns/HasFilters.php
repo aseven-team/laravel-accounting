@@ -2,15 +2,15 @@
 
 namespace AsevenTeam\LaravelAccounting\Filament\Pages\Concerns;
 
+use Filament\Schemas\Schema;
 use Filament\Actions\Action;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Form;
 use Livewire\Attributes\Url;
 
 /**
  * @mixin InteractsWithForms
  *
- * @property Form $filtersForm
+ * @property Schema $filtersForm
  */
 trait HasFilters
 {
@@ -46,13 +46,13 @@ trait HasFilters
         //
     }
 
-    abstract protected function filtersForm(Form $form): Form;
+    abstract protected function filtersForm(Schema $schema): Schema;
 
     protected function getHasFiltersForms(): array
     {
         return [
             'filtersForm' => $this->filtersForm(
-                $this->makeForm()
+                Schema::make()
                     ->statePath('deferredFilters')
             ),
         ];

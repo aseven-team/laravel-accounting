@@ -10,9 +10,9 @@ use Filament\Pages\Page;
 
 class Reports extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-document-chart-bar';
 
-    protected static string $view = 'accounting::filament.pages.reports';
+    protected string $view = 'accounting::filament.pages.reports';
 
     protected static ?int $navigationSort = 1;
 
