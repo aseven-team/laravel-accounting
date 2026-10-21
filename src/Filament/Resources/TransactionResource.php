@@ -99,6 +99,7 @@ class TransactionResource extends Resource
                                             });
                                     })
                                     ->required()
+                                    ->in(fn (Forms\Components\Select $component) => array_keys($component->getOptions()))
                                     ->searchable()
                                     ->createOptionForm(AccountResource::getFormSchema())
                                     ->createOptionUsing(function (array $data) {
