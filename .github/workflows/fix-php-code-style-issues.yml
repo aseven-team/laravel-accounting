@@ -2,6 +2,9 @@ name: Fix PHP code style issues
 
 on:
   push:
+    # branch filter skips tag pushes (detached HEAD can't be committed to); main is protected
+    branches-ignore:
+      - main
     paths:
       - '**.php'
 
