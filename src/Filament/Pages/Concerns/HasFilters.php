@@ -48,16 +48,6 @@ trait HasFilters
 
     abstract protected function filtersForm(Schema $schema): Schema;
 
-    protected function getHasFiltersForms(): array
-    {
-        return [
-            'filtersForm' => $this->filtersForm(
-                Schema::make()
-                    ->statePath('deferredFilters')
-            ),
-        ];
-    }
-
     protected function applyFiltersAction(): Action
     {
         return Action::make('filter')

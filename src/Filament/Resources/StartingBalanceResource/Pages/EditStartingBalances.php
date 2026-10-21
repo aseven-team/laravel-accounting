@@ -14,7 +14,6 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Resources\Pages\Page;
 use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Support\Js;
@@ -95,6 +94,7 @@ class EditStartingBalances extends Page
     public function form(Schema $schema): Schema
     {
         return $schema
+            ->statePath('data')
             ->components([
                 Section::make()
                     ->schema([
@@ -113,8 +113,7 @@ class EditStartingBalances extends Page
                                 Hidden::make('account')
                                     ->dehydrated(false),
                                 TextEntry::make('account')
-                                    ->hiddenLabel()
-                                    ->state(fn (Get $get) => $get('account')),
+                                    ->hiddenLabel(),
                                 MoneyInput::make('debit'),
                                 MoneyInput::make('credit'),
                             ]),
@@ -137,19 +136,6 @@ class EditStartingBalances extends Page
             Action::make('cancel')
                 ->alpineClickHandler('document.referrer ? window.history.back() : (window.location.href = '.Js::from($this->previousUrl ?? self::getResource()::getUrl()).')')
                 ->color('gray'),
-        ];
-    }
-
-    /**
-     * @return array<int|string, string|Schema>
-     */
-    protected function getForms(): array
-    {
-        return [
-            'form' => $this->form(
-                Schema::make()
-                    ->statePath('data'),
-            ),
         ];
     }
 }

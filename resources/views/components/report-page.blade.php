@@ -7,7 +7,7 @@
         </div>
     </x-filament::section>
 
-    <x-filament-tables::container class="overflow-x-auto">
+    <div class="fi-ta-ctn overflow-x-auto rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
         <div wire:init="applyFilters">
             <div wire:loading.flex wire:target="applyFilters" class="flex items-center justify-center w-full min-h-64">
                 <div>
@@ -21,5 +21,5 @@
                 </div>
             @endif
         </div>
-    </x-filament-tables::container>
+    </div>
 </x-filament-panels::page>

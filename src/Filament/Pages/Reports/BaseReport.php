@@ -35,6 +35,7 @@ abstract class BaseReport extends Page
     protected function filtersForm(Schema $schema): Schema
     {
         return $schema
+            ->statePath('deferredFilters')
             ->columns()
             ->schema([
                 DatePicker::make('start_date')
