@@ -6,6 +6,7 @@ use AsevenTeam\LaravelAccounting\Filament\LaravelAccountingFilamentPlugin;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\GeneralLedger;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\Journal;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports\TrialBalance;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Pages\Page;
 
 class Reports extends Page
@@ -15,6 +16,11 @@ class Reports extends Page
     protected string $view = 'accounting::filament.pages.reports';
 
     protected static ?int $navigationSort = 1;
+
+    public static function canAccess(): bool
+    {
+        return TransactionResource::canViewAny();
+    }
 
     public static function getNavigationItemActiveRoutePattern(): string
     {

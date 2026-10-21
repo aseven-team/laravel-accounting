@@ -4,6 +4,7 @@ namespace AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
 
 use AsevenTeam\LaravelAccounting\Filament\Pages\Concerns\HasFilters;
 use AsevenTeam\LaravelAccounting\Filament\Pages\Reports;
+use AsevenTeam\LaravelAccounting\Filament\Resources\TransactionResource;
 use Filament\Forms\Components\DatePicker;
 use Filament\Pages\Page;
 use Filament\Panel;
@@ -18,6 +19,11 @@ abstract class BaseReport extends Page
     protected bool $reportLoaded = false;
 
     abstract protected function clearCachedReport(): void;
+
+    public static function canAccess(): bool
+    {
+        return TransactionResource::canViewAny();
+    }
 
     public static function getSlug(?Panel $panel = null): string
     {

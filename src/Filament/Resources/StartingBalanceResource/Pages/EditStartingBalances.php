@@ -74,7 +74,13 @@ class EditStartingBalances extends Page
         /** @var array{starting_balances: array<int, array{account_id: int, debit: ?float, credit: ?float}>} $data */
         $data = $this->form->getState();
 
+        $accountIds = Accounting::getAccountClass()::query()->pluck('id');
+
         foreach ($data['starting_balances'] as $startingBalance) {
+            if (! $accountIds->contains($startingBalance['account_id'])) {
+                continue;
+            }
+
             if ($startingBalance['debit'] === null && $startingBalance['credit'] === null) {
                 continue;
             }

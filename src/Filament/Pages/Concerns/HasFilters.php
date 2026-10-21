@@ -23,7 +23,7 @@ trait HasFilters
     {
         $this->filters = array_merge(
             $this->getDefaultFilters(),
-            $this->filters,
+            array_filter($this->filters, is_scalar(...)),
         );
 
         $this->filtersForm->fill($this->filters);

@@ -76,6 +76,7 @@ class AccountResource extends Resource
             Select::make('parent_id')
                 ->label(__('Sub account of'))
                 ->options(fn () => Account::query()->pluck('name', 'id'))
+                ->in(fn (Select $component) => array_keys($component->getOptions()))
                 ->searchable(),
             Textarea::make('description')
                 ->nullable()
